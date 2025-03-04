@@ -18,7 +18,7 @@ class SettingsAppBar extends StatelessWidget {
               size: 30,
             ),
             onPressed: () {
-              GoRouter.of(context).pop();
+              GoRouter.of(context).push(AppRouter.rParentHome);
             },
           ),
           const Row(

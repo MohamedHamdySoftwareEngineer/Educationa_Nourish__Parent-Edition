@@ -5,11 +5,11 @@ import 'Parent/core/utils/app_router.dart';
 import 'Parent/features/Parent Home/presentation/views/parent_home.dart';
 
 void main() {
-  runApp(const EduNourish());
+  runApp(const MyApp());
 }
 
-class EduNourish extends StatelessWidget {
-  const EduNourish({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {

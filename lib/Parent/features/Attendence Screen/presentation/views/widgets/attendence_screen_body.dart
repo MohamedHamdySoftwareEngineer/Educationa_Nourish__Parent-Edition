@@ -1,3 +1,4 @@
+import 'package:educational_nourish/Parent/constants.dart';
 import 'package:educational_nourish/Parent/core/widgets/base_widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -13,10 +14,14 @@ class _AttendenceScreenBodyState extends State<AttendenceScreenBody> {
   DateTime currentMonth = DateTime.now();
   List<String> daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   int selectedDay = DateTime.now().day;
-  bool isHappy = true; // Default mood is happy
+  bool isCame =
+      true; // If true, emoji is happy (😀); if false, emoji is sad (😔)
 
   @override
   Widget build(BuildContext context) {
+    // Calculate the common width based on screen width and margin (16 each side)
+    double commonWidth = MediaQuery.of(context).size.width - 32;
+
     return BaseWidgets(
       child: SingleChildScrollView(
         child: ConstrainedBox(
@@ -27,10 +32,11 @@ class _AttendenceScreenBodyState extends State<AttendenceScreenBody> {
             children: [
               // Month selector row with arrows
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 16.0),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 20.0, horizontal: 16.0),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: mainColor,
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: Row(
@@ -50,12 +56,12 @@ class _AttendenceScreenBodyState extends State<AttendenceScreenBody> {
                         child: Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFF0EDFF),
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: const Icon(
                             Icons.arrow_back_ios_rounded,
-                            color: Color(0xFF7B5EF8),
+                            color: Colors.black,
                             size: 18,
                           ),
                         ),
@@ -66,7 +72,7 @@ class _AttendenceScreenBodyState extends State<AttendenceScreenBody> {
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF333333),
+                          color: Colors.white,
                         ),
                       ),
                       const SizedBox(width: 24),
@@ -84,12 +90,12 @@ class _AttendenceScreenBodyState extends State<AttendenceScreenBody> {
                         child: Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFF0EDFF),
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: const Icon(
                             Icons.arrow_forward_ios_rounded,
-                            color: Color(0xFF7B5EF8),
+                            color: Colors.black,
                             size: 18,
                           ),
                         ),
@@ -103,6 +109,7 @@ class _AttendenceScreenBodyState extends State<AttendenceScreenBody> {
 
               // Calendar grid
               Container(
+                width: commonWidth,
                 margin: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -117,7 +124,7 @@ class _AttendenceScreenBodyState extends State<AttendenceScreenBody> {
                   ],
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(12), // Reduced padding from 20 to 12
+                  padding: const EdgeInsets.all(12),
                   child: Column(
                     children: [
                       // Days of week header
@@ -127,7 +134,7 @@ class _AttendenceScreenBodyState extends State<AttendenceScreenBody> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: daysOfWeek.map((day) {
                             return Container(
-                              width: 28, // Adjusted width from 36 to 28
+                              width: 28,
                               alignment: Alignment.center,
                               child: Text(
                                 day,
@@ -150,10 +157,14 @@ class _AttendenceScreenBodyState extends State<AttendenceScreenBody> {
                 ),
               ),
 
-              // Emoji section (removed Expanded to fix overflow)
+              const SizedBox(height: 16),
+
+              // Reduced height mood container with width same as calendar
               Container(
-                margin: const EdgeInsets.all(16),
-                padding: const EdgeInsets.all(24),
+                width: commonWidth,
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                padding:
+                    const EdgeInsets.all(16), // Reduced padding for less height
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
@@ -169,9 +180,10 @@ class _AttendenceScreenBodyState extends State<AttendenceScreenBody> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Selected date text
+                    // Selected date text with reduced vertical padding
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 6),
                       decoration: BoxDecoration(
                         color: const Color(0xFFF0EDFF),
                         borderRadius: BorderRadius.circular(30),
@@ -188,17 +200,21 @@ class _AttendenceScreenBodyState extends State<AttendenceScreenBody> {
                       ),
                     ),
 
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 8), // Reduced spacing
 
-                    // Emoji display
+                    // Emoji display updated based solely on isCame, with reduced padding
+                    // Emoji display with shadow only around the emoji
                     Container(
-                      padding: const EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: isHappy ? const Color(0xFFE6F7FF) : const Color(0xFFFFF0F0),
+                        color: isCame
+                            ? const Color(0xFFE6F7FF)
+                            : const Color(0xFFFFF0F0),
                         shape: BoxShape.circle,
-                        boxShadow: [
+                         boxShadow: [
                           BoxShadow(
-                            color: (isHappy ? Colors.blue : Colors.red).withOpacity(0.1),
+                            color: (isCame ? Colors.blue : Colors.red)
+                                .withOpacity(0.1),
                             spreadRadius: 5,
                             blurRadius: 15,
                             offset: const Offset(0, 5),
@@ -206,65 +222,34 @@ class _AttendenceScreenBodyState extends State<AttendenceScreenBody> {
                         ],
                       ),
                       child: Text(
-                        isHappy ? '😀' : '😔',
-                        style: const TextStyle(
-                          fontSize: 72, // Larger emoji
-                        ),
+                        isCame ? '😀' : '😔',
+                        style: const TextStyle(fontSize: 72),
                       ),
                     ),
 
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 8), // Space between emoji and text
 
-                    // Mood buttons
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _buildMoodButton('Happy', isHappy, () {
-                          setState(() {
-                            isHappy = true;
-                          });
-                        }),
-                        const SizedBox(width: 20),
-                        _buildMoodButton('Sad', !isHappy, () {
-                          setState(() {
-                            isHappy = false;
-                          });
-                        }),
-                      ],
+// Text box below emoji (matching "Select a date" style)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF0EDFF),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Text(
+                        isCame ? 'Present' : 'Absent',
+                        style: const TextStyle(
+                          color: Color(0xFF7B5EF8),
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMoodButton(String text, bool isActive, VoidCallback onTap) {
-    return Material(
-      borderRadius: BorderRadius.circular(30),
-      elevation: isActive ? 4 : 0,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(30),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          decoration: BoxDecoration(
-            color: isActive ? const Color(0xFF7B5EF8) : Colors.grey.shade200,
-            borderRadius: BorderRadius.circular(30),
-            border: isActive
-                ? Border.all(color: const Color(0xFF7B5EF8), width: 2)
-                : Border.all(color: Colors.grey.shade300, width: 1),
-          ),
-          child: Text(
-            text,
-            style: TextStyle(
-              color: isActive ? Colors.white : Colors.grey.shade700,
-              fontWeight: FontWeight.w600,
-              fontSize: 16,
-            ),
           ),
         ),
       ),
@@ -277,7 +262,8 @@ class _AttendenceScreenBodyState extends State<AttendenceScreenBody> {
     // Determine the weekday of the 1st (1 = Monday)
     int firstDayOfWeek = firstDay.weekday;
     // Calculate days in the month
-    int daysInMonth = DateTime(currentMonth.year, currentMonth.month + 1, 0).day;
+    int daysInMonth =
+        DateTime(currentMonth.year, currentMonth.month + 1, 0).day;
 
     List<Widget> dayWidgets = [];
 
@@ -303,7 +289,8 @@ class _AttendenceScreenBodyState extends State<AttendenceScreenBody> {
           onTap: () {
             setState(() {
               selectedDay = day;
-              selectedDate = DateTime(currentMonth.year, currentMonth.month, day);
+              selectedDate =
+                  DateTime(currentMonth.year, currentMonth.month, day);
             });
           },
         ),
@@ -347,8 +334,8 @@ class _AttendenceScreenBodyState extends State<AttendenceScreenBody> {
     return GestureDetector(
       onTap: text.isEmpty ? null : onTap,
       child: Container(
-        width: 28, // Reduced width from 36 to 28
-        height: 28, // Reduced height from 36 to 28
+        width: 28,
+        height: 28,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: isSelected
@@ -379,8 +366,9 @@ class _AttendenceScreenBodyState extends State<AttendenceScreenBody> {
                 : isToday
                     ? const Color(0xFF7B5EF8)
                     : (text.isEmpty ? Colors.transparent : Colors.black87),
-            fontWeight: isSelected || isToday ? FontWeight.bold : FontWeight.normal,
-            fontSize: 12, // Reduced font size from 14 to 12
+            fontWeight:
+                isSelected || isToday ? FontWeight.bold : FontWeight.normal,
+            fontSize: 12,
           ),
         ),
       ),
