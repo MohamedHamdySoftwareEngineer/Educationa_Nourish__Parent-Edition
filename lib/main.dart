@@ -1,8 +1,8 @@
-import 'package:educational_nourish/constants.dart';
+import 'package:educational_nourish/Parent/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'core/utils/app_router.dart';
-import 'features/Parent Home/presentation/views/parent_home.dart';
+import 'Parent/core/utils/app_router.dart';
+import 'Parent/features/Parent Home/presentation/views/parent_home.dart';
 
 void main() {
   runApp(const EduNourish());
