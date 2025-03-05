@@ -1,6 +1,7 @@
 import 'package:educational_nourish/Parent/features/Attendence%20Screen/presentation/views/attendence_screen.dart';
 import 'package:educational_nourish/Parent/features/Bus%20Screen/presentation/views/bus_screen.dart';
 import 'package:educational_nourish/Parent/features/Classes/presentation/views/classes_screen.dart';
+import 'package:educational_nourish/Parent/features/Exam/presentation/views/Exam_Screen.dart';
 import 'package:educational_nourish/Parent/features/My%20Child%20Screen/presentation/views/my_child_screen.dart';
 import 'package:educational_nourish/Parent/features/Parent%20Home/presentation/views/parent_home.dart';
 import 'package:educational_nourish/Parent/features/Parent%20Profile/presentation/views/parent_profile.dart';
@@ -17,7 +18,7 @@ abstract class AppRouter {
   static const rMyChildScreen = '/MyChildScreen';
   static const rClassesScreen = '/ClassesScreen';
   static const rAttendenceScreen = '/AttendenceScreen';
-
+  static const rExamScreen = '/ExamScreen';
 
   static final router = GoRouter(routes: [
     GoRoute(path: rParentHome, builder: (context, state) => const ParentHome()),
@@ -37,8 +38,9 @@ abstract class AppRouter {
     GoRoute(
         path: rClassesScreen,
         builder: (context, state) => const ClassesScreen()),
-     GoRoute(
+    GoRoute(
         path: rAttendenceScreen,
         builder: (context, state) => const AttendenceScreen()),
+    GoRoute(path: rExamScreen, builder: (context, state) => const ExamScreen()),
   ]);
 }

@@ -72,8 +72,14 @@ class MyChildScreenBody extends StatelessWidget {
                 ),
                 const BuildCard('food place', 'assets/parent/icons/icon.svg'),
                 const BuildCard('grade', 'assets/parent/icons/Star.svg'),
-                const BuildCard('Exam', 'assets/parent/icons/Book.svg'),
-                const BuildCard('BUS', 'assets/parent/icons/bus.svg'),
+                InkWell(onTap: (){
+                  GoRouter.of(context).push(AppRouter.rExamScreen);
+                },
+                  child: const BuildCard('Exam', 'assets/parent/icons/Book.svg')),
+                InkWell(onTap: (){
+                  GoRouter.of(context).push(AppRouter.rBusScreen);
+                },
+                  child: const BuildCard('BUS', 'assets/parent/icons/bus.svg')),
               ],
             ),
           ),

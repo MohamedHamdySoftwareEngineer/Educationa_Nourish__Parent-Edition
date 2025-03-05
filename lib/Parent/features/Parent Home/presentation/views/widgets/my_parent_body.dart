@@ -52,13 +52,18 @@ class MyParentBody extends StatelessWidget {
                   left: 20,
                   bottom: 40,
                   right: 20),
-              const BuildIconCard(
-                  label: 'Payment',
-                  imagePath: paymentHome,
-                  top: 10,
-                  left: 20,
-                  bottom: 50,
-                  right: 20),
+              InkWell(
+                onTap: () {
+                  GoRouter.of(context).push(AppRouter.rPaymentScreen);
+                },
+                child: const BuildIconCard(
+                    label: 'Payment',
+                    imagePath: paymentHome,
+                    top: 10,
+                    left: 20,
+                    bottom: 50,
+                    right: 20),
+              ),
             ],
           ),
         ),
