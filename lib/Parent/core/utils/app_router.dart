@@ -7,6 +7,7 @@ import 'package:educational_nourish/Parent/features/Parent%20Home/presentation/v
 import 'package:educational_nourish/Parent/features/Parent%20Profile/presentation/views/parent_profile.dart';
 import 'package:educational_nourish/Parent/features/Payment%20Screen/presentation/views/payment.dart';
 import 'package:educational_nourish/Parent/features/Settings%20Screen/presentation/views/settings_screen.dart';
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
 abstract class AppRouter {
@@ -20,27 +21,27 @@ abstract class AppRouter {
   static const rAttendenceScreen = '/AttendenceScreen';
   static const rExamScreen = '/ExamScreen';
 
-  static final router = GoRouter(routes: [
-    GoRoute(path: rParentHome, builder: (context, state) => const ParentHome()),
-    GoRoute(
-        path: rPaymentScreen,
-        builder: (context, state) => const PaymentScreen()),
-    GoRoute(path: rBusScreen, builder: (context, state) => const BusScreen()),
-    GoRoute(
-        path: rSettingsScreen,
-        builder: (context, state) => const SettingsScreen()),
-    GoRoute(
-        path: rParentProfile,
-        builder: (context, state) => const ParentProfile()),
-    GoRoute(
-        path: rMyChildScreen,
-        builder: (context, state) => const MyChildScreen()),
-    GoRoute(
-        path: rClassesScreen,
-        builder: (context, state) => const ClassesScreen()),
-    GoRoute(
-        path: rAttendenceScreen,
-        builder: (context, state) => const AttendenceScreen()),
-    GoRoute(path: rExamScreen, builder: (context, state) => const ExamScreen()),
-  ]);
+  static GoRoute _buildRoute(String path, Widget child) {
+    return GoRoute(
+      path: path,
+      pageBuilder: (context, state) => NoTransitionPage(
+        key: state.pageKey,
+        child: child,
+      ),
+    );
+  }
+
+  static final router = GoRouter(
+    routes: [
+      _buildRoute(rParentHome, const ParentHome()),
+      _buildRoute(rPaymentScreen, const PaymentScreen()),
+      _buildRoute(rBusScreen, const BusScreen()),
+      _buildRoute(rSettingsScreen, const SettingsScreen()),
+      _buildRoute(rParentProfile, const ParentProfile()),
+      _buildRoute(rMyChildScreen, const MyChildScreen()),
+      _buildRoute(rClassesScreen, const ClassesScreen()),
+      _buildRoute(rAttendenceScreen, const AttendenceScreen()),
+      _buildRoute(rExamScreen, const ExamScreen()),
+    ],
+  );
 }
