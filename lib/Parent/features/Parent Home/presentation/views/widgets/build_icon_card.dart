@@ -1,3 +1,4 @@
+import 'package:educational_nourish/Parent/constants.dart';
 import 'package:flutter/material.dart';
 
 class BuildIconCard extends StatelessWidget {
@@ -31,7 +32,7 @@ class BuildIconCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(40),
           ),
           // elevation: 4, // Optional: Add elevation for a shadow effect
-          color: const Color(0xFF82D1FC),
+          color: mainColor,
           child: Container(
             alignment: Alignment.bottomCenter,
             child: Padding(

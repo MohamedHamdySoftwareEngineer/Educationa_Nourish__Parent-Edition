@@ -1,11 +1,13 @@
 import 'package:educational_nourish/Parent/core/utils/assets.dart';
-import 'package:educational_nourish/Parent/core/widgets/base_widgets.dart';
+import 'package:educational_nourish/Parent/core/widgets/base_scaffold.dart';
 import 'package:educational_nourish/Parent/features/Payment%20Screen/presentation/views/widgets/card_number_input_formatter.dart';
 import 'package:educational_nourish/Parent/features/Payment%20Screen/presentation/views/widgets/header_section.dart';
 import 'package:educational_nourish/Parent/features/Payment%20Screen/presentation/views/widgets/payment_method_selector.dart';
 import 'package:educational_nourish/Parent/features/Payment%20Screen/presentation/views/widgets/valid_until_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import '../../../../../constants.dart';
 
 class PaymentBody extends StatefulWidget {
   final bool isNavigateFromBody;
@@ -36,25 +38,30 @@ class _PaymentBodyState extends State<PaymentBody> {
   // Simplified validation
   Map<String, String?> _validateFields() {
     return {
-      'cardNumber': _cardNumberController.text.replaceAll(' ', '').length != 16 
-          ? 'Enter a valid card number' : null,
-      'validUntil': !RegExp(r"^(0[1-9]|1[0-2])\/\d{2}$").hasMatch(_validUntilController.text)
-          ? 'Enter a valid date (MM/YY)' : null,
-      'cvv': _cvvController.text.length != 3 
-          ? 'Enter a valid 3-digit CVV' : null,
-      'cardHolder': _cardHolderController.text.isEmpty 
-          ? 'Card holder name is required' 
+      'cardNumber': _cardNumberController.text.replaceAll(' ', '').length != 16
+          ? 'Enter a valid card number'
+          : null,
+      'validUntil': !RegExp(r"^(0[1-9]|1[0-2])\/\d{2}$")
+              .hasMatch(_validUntilController.text)
+          ? 'Enter a valid date (MM/YY)'
+          : null,
+      'cvv':
+          _cvvController.text.length != 3 ? 'Enter a valid 3-digit CVV' : null,
+      'cardHolder': _cardHolderController.text.isEmpty
+          ? 'Card holder name is required'
           : (!RegExp(r"^[a-zA-Z\s]+$").hasMatch(_cardHolderController.text)
-              ? 'Enter a valid name (letters only)' : null),
+              ? 'Enter a valid name (letters only)'
+              : null),
     };
   }
 
   void _onPayButtonPressed() {
     final errors = _validateFields().values.where((error) => error != null);
-    
+
     if (errors.isNotEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please correct the errors before proceeding.')),
+        const SnackBar(
+            content: Text('Please correct the errors before proceeding.')),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -65,7 +72,7 @@ class _PaymentBodyState extends State<PaymentBody> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseWidgets(
+    return BaseScaffold(
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -76,7 +83,8 @@ class _PaymentBodyState extends State<PaymentBody> {
               const SizedBox(height: 21),
               PaymentMethodSelector(
                 selectedMethod: _selectedPaymentMethod,
-                onMethodSelected: (method) => setState(() => _selectedPaymentMethod = method),
+                onMethodSelected: (method) =>
+                    setState(() => _selectedPaymentMethod = method),
               ),
               const SizedBox(height: 21),
               _buildCardNumberField(),
@@ -110,7 +118,9 @@ class _PaymentBodyState extends State<PaymentBody> {
             const SizedBox(width: 20),
           ],
         ),
-        border: const OutlineInputBorder(),
+        border: customBorder,
+        enabledBorder: customBorder,
+        focusedBorder: customBorder,
       ),
       keyboardType: TextInputType.number,
       inputFormatters: [
@@ -127,9 +137,11 @@ class _PaymentBodyState extends State<PaymentBody> {
         Expanded(
           child: TextField(
             controller: _validUntilController,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: 'Valid until (MM/YY)',
-              border: OutlineInputBorder(),
+              border: customBorder,
+              enabledBorder: customBorder,
+              focusedBorder: customBorder,
             ),
             keyboardType: TextInputType.number,
             inputFormatters: [
@@ -143,9 +155,11 @@ class _PaymentBodyState extends State<PaymentBody> {
         Expanded(
           child: TextField(
             controller: _cvvController,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: 'CVV',
-              border: OutlineInputBorder(),
+              border: customBorder,
+              enabledBorder: customBorder,
+              focusedBorder: customBorder,
             ),
             keyboardType: TextInputType.number,
             inputFormatters: [
@@ -161,10 +175,12 @@ class _PaymentBodyState extends State<PaymentBody> {
   Widget _buildCardHolderField() {
     return TextField(
       controller: _cardHolderController,
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         labelText: 'Card holder',
         hintText: 'Your name and username',
-        border: OutlineInputBorder(),
+        border: customBorder,
+        enabledBorder: customBorder,
+        focusedBorder: customBorder,
       ),
     );
   }
@@ -173,7 +189,8 @@ class _PaymentBodyState extends State<PaymentBody> {
     return Row(
       children: [
         const Expanded(
-          child: Text('Save card data for future payment', style: TextStyle(fontSize: 16)),
+          child: Text('Save card data for future payment',
+              style: TextStyle(fontSize: 16)),
         ),
         Switch(
           value: _isSaveCardData,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../../../constants.dart';
+
 class BuildCard extends StatelessWidget {
   const BuildCard(
     this.title, 
@@ -17,7 +19,7 @@ class BuildCard extends StatelessWidget {
     return Card(
       elevation: 10,
       // shadowColor: Color(0xFF1d6a91),
-      color: const Color(0xFF59b2de),
+      color:  mainColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(55),
       ),

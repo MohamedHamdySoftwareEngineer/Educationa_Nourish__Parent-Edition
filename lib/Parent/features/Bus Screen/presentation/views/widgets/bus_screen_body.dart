@@ -1,5 +1,5 @@
 import 'package:educational_nourish/Parent/core/utils/assets.dart';
-import 'package:educational_nourish/Parent/core/widgets/base_widgets.dart';
+import 'package:educational_nourish/Parent/core/widgets/base_scaffold.dart';
 import 'package:flutter/material.dart';
 
 class BusScreenBody extends StatelessWidget {
@@ -7,7 +7,7 @@ class BusScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BaseWidgets(
+    return BaseScaffold(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

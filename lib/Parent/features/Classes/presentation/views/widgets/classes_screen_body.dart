@@ -1,4 +1,4 @@
-import 'package:educational_nourish/Parent/core/widgets/base_widgets.dart';
+import 'package:educational_nourish/Parent/core/widgets/base_scaffold.dart';
 import 'package:educational_nourish/Parent/features/Classes/presentation/views/widgets/header_title.dart';
 import 'package:flutter/material.dart';
 
@@ -7,9 +7,16 @@ class ClassesScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> subjects = ["Math", "Science", "English", "Arabic", "ICT", "PE"];
+    final List<String> subjects = [
+      "Math",
+      "Science",
+      "English",
+      "Arabic",
+      "ICT",
+      "PE"
+    ];
 
-    return BaseWidgets(
+    return BaseScaffold(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: SingleChildScrollView(
@@ -52,7 +59,6 @@ class ClassesScreenBody extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text("Departure time  7:30", style: TextStyle(fontSize: 16)),
-                  
                   Text("arrival time  3:30", style: TextStyle(fontSize: 16)),
                 ],
               ),
@@ -65,37 +71,51 @@ class ClassesScreenBody extends StatelessWidget {
 
   SingleChildScrollView schedule() {
     return SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black),
-                ),
-                child: DataTable(
-                  border: TableBorder.all(color: Colors.black),
-                  columnSpacing: 16.0,
-                  horizontalMargin: 15.0,
-                  headingRowHeight: 40.0,
-                  dataRowMaxHeight: 40.0,
-                  dataRowMinHeight: 40.0,
-                  columns: const [
-                    DataColumn(label: Text("MON", style: TextStyle(fontSize: 16))),
-                    DataColumn(label: Text("TUE", style: TextStyle(fontSize: 16))),
-                    DataColumn(label: Text("WED", style: TextStyle(fontSize: 16))),
-                    DataColumn(label: Text("THU", style: TextStyle(fontSize: 16))),
-                    DataColumn(label: Text("SAT", style: TextStyle(fontSize: 16))),
-                  ],
-                  rows: [
-                    DataRow(cells: _buildCellsSmall(["math", "english", "arabic", "RE", "PE"])),
-                    DataRow(cells: _buildCellsSmall(["science", "math", "english", "arabic", "ICT"])),
-                    DataRow(cells: _buildCellsSmall(["ICT", "science", "math", "english", "arabic"])),
-                    DataRow(cells: _buildCellsSmall(["PE", "ICT", "science", "math", "english"])),
-                    DataRow(cells: _buildCellsSmall(["break", "break", "break", "break", "break"])),
-                    DataRow(cells: _buildCellsSmall(["science", "math", "english", "RE", "PE"])),
-                    DataRow(cells: _buildCellsSmall(["math", "english", "science", "arabic", "PE"])),
-                  ],
-                ),
-              ),
-            );
+      scrollDirection: Axis.horizontal,
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.black),
+        ),
+        child: DataTable(
+          border: TableBorder.all(color: Colors.black),
+          columnSpacing: 16.0,
+          horizontalMargin: 15.0,
+          headingRowHeight: 40.0,
+          dataRowMaxHeight: 40.0,
+          dataRowMinHeight: 40.0,
+          columns: const [
+            DataColumn(label: Text("MON", style: TextStyle(fontSize: 16))),
+            DataColumn(label: Text("TUE", style: TextStyle(fontSize: 16))),
+            DataColumn(label: Text("WED", style: TextStyle(fontSize: 16))),
+            DataColumn(label: Text("THU", style: TextStyle(fontSize: 16))),
+            DataColumn(label: Text("SAT", style: TextStyle(fontSize: 16))),
+          ],
+          rows: [
+            DataRow(
+                cells: _buildCellsSmall(
+                    ["math", "english", "arabic", "RE", "PE"])),
+            DataRow(
+                cells: _buildCellsSmall(
+                    ["science", "math", "english", "arabic", "ICT"])),
+            DataRow(
+                cells: _buildCellsSmall(
+                    ["ICT", "science", "math", "english", "arabic"])),
+            DataRow(
+                cells: _buildCellsSmall(
+                    ["PE", "ICT", "science", "math", "english"])),
+            DataRow(
+                cells: _buildCellsSmall(
+                    ["break", "break", "break", "break", "break"])),
+            DataRow(
+                cells: _buildCellsSmall(
+                    ["science", "math", "english", "RE", "PE"])),
+            DataRow(
+                cells: _buildCellsSmall(
+                    ["math", "english", "science", "arabic", "PE"])),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildSubjectContainer(String subject) {
@@ -126,16 +146,14 @@ class ClassesScreenBody extends StatelessWidget {
   }
 
   List<DataCell> _buildCellsSmall(List<String> cells) {
-    return cells
-        .map((cell) {
-          return DataCell(
-              Text(
-                cell,
-                style: const TextStyle(fontSize: 15),
-              ),
-            );
-        })
-        .toList();
+    return cells.map((cell) {
+      return DataCell(
+        Text(
+          cell,
+          style: const TextStyle(fontSize: 15),
+        ),
+      );
+    }).toList();
   }
 }
 

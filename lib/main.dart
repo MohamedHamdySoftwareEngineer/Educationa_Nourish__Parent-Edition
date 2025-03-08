@@ -18,8 +18,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         textTheme: GoogleFonts.robotoTextTheme(),
-        scaffoldBackgroundColor: mainColor,
+        scaffoldBackgroundColor: Colors.transparent,
+      
       ),
+      
     );
   }
 }

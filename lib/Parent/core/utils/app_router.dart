@@ -7,11 +7,15 @@ import 'package:educational_nourish/Parent/features/Parent%20Home/presentation/v
 import 'package:educational_nourish/Parent/features/Parent%20Profile/presentation/views/parent_profile.dart';
 import 'package:educational_nourish/Parent/features/Payment%20Screen/presentation/views/payment.dart';
 import 'package:educational_nourish/Parent/features/Settings%20Screen/presentation/views/settings_screen.dart';
+import 'package:educational_nourish/intro_Screens/choice_screen.dart';
+import 'package:educational_nourish/intro_Screens/on_boarding_screen.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
 abstract class AppRouter {
-  static const rParentHome = '/';
+  static const rOnBoardingScreen = '/';
+  static const rChoiceScreen = '/ChoiceScreen';
+  static const rParentHome = '/ParentHome';
   static const rPaymentScreen = '/PaymentScreen';
   static const rBusScreen = '/BusScreen';
   static const rSettingsScreen = '/SettingsScreen';
@@ -33,6 +37,8 @@ abstract class AppRouter {
 
   static final router = GoRouter(
     routes: [
+      _buildRoute(rOnBoardingScreen,  OnBoardingScreen()),
+      _buildRoute(rChoiceScreen,  const ChoiceScreen()),
       _buildRoute(rParentHome, const ParentHome()),
       _buildRoute(rPaymentScreen, const PaymentScreen()),
       _buildRoute(rBusScreen, const BusScreen()),

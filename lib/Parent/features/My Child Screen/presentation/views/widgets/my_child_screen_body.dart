@@ -1,5 +1,5 @@
 import 'package:educational_nourish/Parent/core/utils/app_router.dart';
-import 'package:educational_nourish/Parent/core/widgets/base_widgets.dart';
+import 'package:educational_nourish/Parent/core/widgets/base_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -10,7 +10,7 @@ class MyChildScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BaseWidgets(
+    return BaseScaffold(
         child: Container(
       padding: const EdgeInsets.only(left: 16.0, bottom: 16, right: 16),
       child: Column(
@@ -57,13 +57,13 @@ class MyChildScreenBody extends StatelessWidget {
                     GoRouter.of(context).push(AppRouter.rClassesScreen);
                   },
                   child: const BuildCard(
-                    'Rem.Exp',
+                    'classes',
                     'assets/parent/icons/Calendar.svg',
                   ),
                 ),
-                 InkWell(
-                  onTap: (){
-                       GoRouter.of(context).push(AppRouter.rAttendenceScreen);
+                InkWell(
+                  onTap: () {
+                    GoRouter.of(context).push(AppRouter.rAttendenceScreen);
                   },
                   child: const BuildCard(
                     'attendance',
@@ -72,14 +72,18 @@ class MyChildScreenBody extends StatelessWidget {
                 ),
                 const BuildCard('food place', 'assets/parent/icons/icon.svg'),
                 const BuildCard('grade', 'assets/parent/icons/Star.svg'),
-                InkWell(onTap: (){
-                  GoRouter.of(context).push(AppRouter.rExamScreen);
-                },
-                  child: const BuildCard('Exam', 'assets/parent/icons/Book.svg')),
-                InkWell(onTap: (){
-                  GoRouter.of(context).push(AppRouter.rBusScreen);
-                },
-                  child: const BuildCard('BUS', 'assets/parent/icons/bus.svg')),
+                InkWell(
+                    onTap: () {
+                      GoRouter.of(context).push(AppRouter.rExamScreen);
+                    },
+                    child: const BuildCard(
+                        'Exam', 'assets/parent/icons/Book.svg')),
+                InkWell(
+                    onTap: () {
+                      GoRouter.of(context).push(AppRouter.rBusScreen);
+                    },
+                    child:
+                        const BuildCard('BUS', 'assets/parent/icons/bus.svg')),
               ],
             ),
           ),

@@ -1,5 +1,5 @@
 import 'package:educational_nourish/Parent/constants.dart';
-import 'package:educational_nourish/Parent/core/widgets/base_widgets.dart';
+import 'package:educational_nourish/Parent/core/widgets/base_scaffold.dart';
 import 'package:flutter/material.dart';
 
 class AttendenceScreenBody extends StatefulWidget {
@@ -22,7 +22,7 @@ class _AttendenceScreenBodyState extends State<AttendenceScreenBody> {
     // Calculate the common width based on screen width and margin (16 each side)
     double commonWidth = MediaQuery.of(context).size.width - 32;
 
-    return BaseWidgets(
+    return BaseScaffold(
       child: SingleChildScrollView(
         child: ConstrainedBox(
           constraints: BoxConstraints(
@@ -36,7 +36,7 @@ class _AttendenceScreenBodyState extends State<AttendenceScreenBody> {
                     vertical: 20.0, horizontal: 16.0),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: mainColor,
+                    color: Colors.transparent,
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: Row(
@@ -211,7 +211,7 @@ class _AttendenceScreenBodyState extends State<AttendenceScreenBody> {
                             ? const Color(0xFFE6F7FF)
                             : const Color(0xFFFFF0F0),
                         shape: BoxShape.circle,
-                         boxShadow: [
+                        boxShadow: [
                           BoxShadow(
                             color: (isCame ? Colors.blue : Colors.red)
                                 .withOpacity(0.1),

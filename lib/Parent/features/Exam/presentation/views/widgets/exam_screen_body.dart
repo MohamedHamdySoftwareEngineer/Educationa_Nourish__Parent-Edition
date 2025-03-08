@@ -2,7 +2,7 @@ import 'package:educational_nourish/Parent/constants.dart';
 import 'package:educational_nourish/Parent/core/utils/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:educational_nourish/Parent/core/widgets/base_widgets.dart';
+import 'package:educational_nourish/Parent/core/widgets/base_scaffold.dart';
 
 class Exam {
   final String type;
@@ -59,7 +59,7 @@ class _ExamScreenBodyState extends State<ExamScreenBody> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseWidgets(
+    return BaseScaffold(
       child: Column(
         children: [
           _buildFilterSection(),
@@ -131,9 +131,9 @@ class _ExamScreenBodyState extends State<ExamScreenBody> {
     return DropdownButtonFormField<String>(
       decoration: InputDecoration(
         labelText: labelText, // This is the text on the border
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
+        border: customBorder,
+        enabledBorder: customBorder,
+        focusedBorder: customBorder,
       ),
       value: value,
       items: dropdownItems,
