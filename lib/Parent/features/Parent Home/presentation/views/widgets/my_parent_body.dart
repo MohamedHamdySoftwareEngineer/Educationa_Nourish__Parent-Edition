@@ -1,8 +1,11 @@
+import 'package:educational_nourish/Parent/constants.dart';
 import 'package:educational_nourish/Parent/core/utils/app_router.dart';
 import 'package:educational_nourish/Parent/core/utils/assets.dart';
 import 'package:educational_nourish/Parent/features/Parent%20Home/presentation/views/widgets/build_icon_card.dart';
+import 'package:educational_nourish/Parent/features/Parent%20Home/presentation/views/widgets/parent_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class MyParentBody extends StatelessWidget {
   const MyParentBody({super.key});
@@ -12,10 +15,7 @@ class MyParentBody extends StatelessWidget {
     return Column(
       children: [
         // News Box
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-          child: Image.asset(schoolNews),
-        ),
+        ParentSlider(),
 
         // Cards Grid
         Expanded(

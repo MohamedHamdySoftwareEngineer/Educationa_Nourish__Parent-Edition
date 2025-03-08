@@ -28,6 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  smooth_page_indicator: ^1.0.0
   concentric_transition: ^1.0.1+1
   lottie: ^3.1.3
   intl: ^0.20.2
@@ -71,6 +72,8 @@ flutter:
     - assets/parent/
     - assets/parent/icons/
     - assets/parent/images/
+    - assets/student/Home_Student/
+    - assets/student/My_Teachers
     - assets/classes_screen/
     - assets/payment_screen/
     - assets/bus_screen/
