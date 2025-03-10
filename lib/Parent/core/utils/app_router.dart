@@ -2,6 +2,7 @@ import 'package:educational_nourish/Parent/features/Attendence%20Screen/presenta
 import 'package:educational_nourish/Parent/features/Bus%20Screen/presentation/views/bus_screen.dart';
 import 'package:educational_nourish/Parent/features/Classes/presentation/views/classes_screen.dart';
 import 'package:educational_nourish/Parent/features/Exam/presentation/views/Exam_Screen.dart';
+import 'package:educational_nourish/Parent/features/Grade/presentation/views/grade_screen.dart';
 import 'package:educational_nourish/Parent/features/My%20Child%20Screen/presentation/views/my_child_screen.dart';
 import 'package:educational_nourish/Parent/features/Parent%20Home/presentation/views/parent_home.dart';
 import 'package:educational_nourish/Parent/features/Parent%20Profile/presentation/views/parent_profile.dart';
@@ -9,11 +10,13 @@ import 'package:educational_nourish/Parent/features/Payment%20Screen/presentatio
 import 'package:educational_nourish/Parent/features/Settings%20Screen/presentation/views/settings_screen.dart';
 import 'package:educational_nourish/intro_Screens/choice_screen.dart';
 import 'package:educational_nourish/intro_Screens/on_boarding_screen.dart';
+import 'package:educational_nourish/intro_Screens/splash_screen.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
 abstract class AppRouter {
-  static const rOnBoardingScreen = '/';
+  static const rSplashScreen = '/';
+  static const rOnBoardingScreen = '/OnBoardingScreen';
   static const rChoiceScreen = '/ChoiceScreen';
   static const rParentHome = '/ParentHome';
   static const rPaymentScreen = '/PaymentScreen';
@@ -24,6 +27,7 @@ abstract class AppRouter {
   static const rClassesScreen = '/ClassesScreen';
   static const rAttendenceScreen = '/AttendenceScreen';
   static const rExamScreen = '/ExamScreen';
+  static const rGradeScreen = '/GradeScreen';
 
   static GoRoute _buildRoute(String path, Widget child) {
     return GoRoute(
@@ -37,8 +41,9 @@ abstract class AppRouter {
 
   static final router = GoRouter(
     routes: [
-      _buildRoute(rOnBoardingScreen,  OnBoardingScreen()),
-      _buildRoute(rChoiceScreen,  const ChoiceScreen()),
+      _buildRoute(rSplashScreen, const SplashScreen()),
+      _buildRoute(rOnBoardingScreen, OnBoardingScreen()),
+      _buildRoute(rChoiceScreen, const ChoiceScreen()),
       _buildRoute(rParentHome, const ParentHome()),
       _buildRoute(rPaymentScreen, const PaymentScreen()),
       _buildRoute(rBusScreen, const BusScreen()),
@@ -48,6 +53,7 @@ abstract class AppRouter {
       _buildRoute(rClassesScreen, const ClassesScreen()),
       _buildRoute(rAttendenceScreen, const AttendenceScreen()),
       _buildRoute(rExamScreen, const ExamScreen()),
+      _buildRoute(rGradeScreen, const GradeScreen()),
     ],
   );
 }

@@ -34,10 +34,7 @@ class Exams extends StatelessWidget {
               ),
             ),
           ),
-          Column(
-            children: [],
-            // Top bar: "STUDENT PROFILE" on the left, an icon on the right
-          )
+          
         ]));
   }
 }

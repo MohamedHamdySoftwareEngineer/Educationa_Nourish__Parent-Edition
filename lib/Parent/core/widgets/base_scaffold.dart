@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 
 class BaseScaffold extends StatelessWidget {
   final Widget child;
-  final List<Color> gradientColors;
-  const BaseScaffold({super.key, required this.child,this.gradientColors = const [mainColor, secondColor],});
+  
+  const BaseScaffold({super.key, required this.child,});
 
   @override
   Widget build(BuildContext context) {

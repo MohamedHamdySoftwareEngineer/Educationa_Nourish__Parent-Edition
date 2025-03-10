@@ -39,7 +39,7 @@ class ParentSlider extends StatelessWidget {
         SmoothPageIndicator(
           controller: _pageController,
           count: 10,
-          effect: const ExpandingDotsEffect(
+          effect: ExpandingDotsEffect(
             dotWidth: 8,
             dotHeight: 8,
             activeDotColor: secondColor,

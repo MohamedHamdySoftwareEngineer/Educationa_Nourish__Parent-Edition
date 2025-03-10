@@ -22,7 +22,7 @@ class PaymentMethodButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
         decoration: BoxDecoration(
-          color: isSelected ? Colors.blue : mainColor,
+          color: isSelected ? Colors.blue : Colors.white,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(color: Colors.blue,width: 1)
         ),

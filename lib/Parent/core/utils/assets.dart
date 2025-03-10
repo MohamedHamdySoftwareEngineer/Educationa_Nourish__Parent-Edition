@@ -1,3 +1,4 @@
+const splashScreen = 'assets/splashSceen.png';
 const schoolNews = 'assets/School_News.png';
 const teacherHome = 'assets/Teacher.png';
 const studentHome = 'assets/Student.png';

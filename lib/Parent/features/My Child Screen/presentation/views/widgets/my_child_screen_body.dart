@@ -71,7 +71,11 @@ class MyChildScreenBody extends StatelessWidget {
                   ),
                 ),
                 const BuildCard('food place', 'assets/parent/icons/icon.svg'),
-                const BuildCard('grade', 'assets/parent/icons/Star.svg'),
+                InkWell(
+                  onTap: (){
+                  GoRouter.of(context).push(AppRouter.rGradeScreen);
+                },
+                  child: const BuildCard('grade', 'assets/parent/icons/Star.svg')),
                 InkWell(
                     onTap: () {
                       GoRouter.of(context).push(AppRouter.rExamScreen);

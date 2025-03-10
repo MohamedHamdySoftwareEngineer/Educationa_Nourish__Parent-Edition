@@ -73,7 +73,7 @@ flutter:
     - assets/parent/icons/
     - assets/parent/images/
     - assets/student/Home_Student/
-    - assets/student/My_Teachers
+    # - assets/student/My_Teachers
     - assets/classes_screen/
     - assets/payment_screen/
     - assets/bus_screen/
