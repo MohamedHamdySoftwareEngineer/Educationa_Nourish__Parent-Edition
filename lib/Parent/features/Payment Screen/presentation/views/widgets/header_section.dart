@@ -1,3 +1,4 @@
+import 'package:educational_nourish/Parent/core/utils/styles.dart';
 import 'package:flutter/material.dart';
 
 class HeaderSection extends StatelessWidget {
@@ -11,7 +12,7 @@ class HeaderSection extends StatelessWidget {
         Center(
           child: Text(
             'Payment data',
-            style: TextStyle(fontSize: 24, color: Colors.black, fontWeight: FontWeight.w600),
+            style: textBold28,
           ),
         ),
         SizedBox(height: 30),

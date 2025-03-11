@@ -14,3 +14,4 @@ const checkIcon = 'assets/parent/icons/check.svg';
 const mapImage =
     'assets/bus_screen/🌎 Map Maker_ Alexandria, Alexandria, Egypt (Multi Brand Network).png';
 const parentImage = 'assets/parent/images/ParentImage.png';
+const teacherImage = 'assets/parent/images/teacher_image.png';

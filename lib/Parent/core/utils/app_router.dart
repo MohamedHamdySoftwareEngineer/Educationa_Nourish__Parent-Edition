@@ -8,6 +8,7 @@ import 'package:educational_nourish/Parent/features/Parent%20Home/presentation/v
 import 'package:educational_nourish/Parent/features/Parent%20Profile/presentation/views/parent_profile.dart';
 import 'package:educational_nourish/Parent/features/Payment%20Screen/presentation/views/payment.dart';
 import 'package:educational_nourish/Parent/features/Settings%20Screen/presentation/views/settings_screen.dart';
+import 'package:educational_nourish/Parent/features/Teacher%20Screen/presentation/views/teacher_screen.dart';
 import 'package:educational_nourish/intro_Screens/choice_screen.dart';
 import 'package:educational_nourish/intro_Screens/on_boarding_screen.dart';
 import 'package:educational_nourish/intro_Screens/splash_screen.dart';
@@ -28,6 +29,7 @@ abstract class AppRouter {
   static const rAttendenceScreen = '/AttendenceScreen';
   static const rExamScreen = '/ExamScreen';
   static const rGradeScreen = '/GradeScreen';
+  static const rTeacherScreen = '/TeacherScreen';
 
   static GoRoute _buildRoute(String path, Widget child) {
     return GoRoute(
@@ -54,6 +56,7 @@ abstract class AppRouter {
       _buildRoute(rAttendenceScreen, const AttendenceScreen()),
       _buildRoute(rExamScreen, const ExamScreen()),
       _buildRoute(rGradeScreen, const GradeScreen()),
+      _buildRoute(rTeacherScreen, const TeacherScreen()),
     ],
   );
 }
