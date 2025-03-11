@@ -5,9 +5,9 @@ import '../List/drawer_page.dart';
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  ProfilePageState createState() => ProfilePageState();
 }
-class _ProfilePageState extends State<ProfilePage> {
+class ProfilePageState extends State<ProfilePage> {
   Future<Profile> fetchProfile() async {
     final response = await http.get(Uri.parse(
         'https://backend-little-haze-120.fly.dev/api/advisors/21058'));

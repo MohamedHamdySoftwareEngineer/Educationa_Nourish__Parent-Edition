@@ -62,8 +62,7 @@ class _ExamScreenBodyState extends State<ExamScreenBody> {
     return BaseScaffold(
       child: Column(
         children: [
-          _buildFilterSection(),
-          _buildResetButton(),
+          _buildFilterSection(), 
           _buildExamList(),
         ],
       ),
@@ -143,15 +142,7 @@ class _ExamScreenBodyState extends State<ExamScreenBody> {
     );
   }
 
-  Widget _buildResetButton() {
-    return ElevatedButton(
-      onPressed: () => setState(() {
-        selectedType = null;
-        selectedSubject = null;
-      }),
-      child: const Text('Reset Filters'),
-    );
-  }
+  
 
   Widget _buildExamList() {
     return Expanded(
@@ -161,7 +152,7 @@ class _ExamScreenBodyState extends State<ExamScreenBody> {
         itemBuilder: (context, index) {
           final exam = filteredExams[index];
           return Card(
-            elevation: 6,
+            elevation: 10,
             margin: const EdgeInsets.symmetric(vertical: 10),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
@@ -186,6 +177,7 @@ class _ExamScreenBodyState extends State<ExamScreenBody> {
                         ),
                       ),
                       Container(
+                        width: 90, 
                         padding: const EdgeInsets.symmetric(
                             horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
@@ -194,7 +186,9 @@ class _ExamScreenBodyState extends State<ExamScreenBody> {
                         ),
                         child: Text(
                           exam.type,
-                          style: mainText18,
+                          style: mainText18.copyWith(fontSize: 16),
+                          textAlign: TextAlign.center, // Center the text
+                          overflow: TextOverflow.ellipsis, // Handle overflow
                         ),
                       ),
                     ],

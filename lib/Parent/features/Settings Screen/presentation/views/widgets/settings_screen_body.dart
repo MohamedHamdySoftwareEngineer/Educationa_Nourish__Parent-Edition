@@ -62,16 +62,7 @@ class SettingsScreenBody extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    ListTile(
-                      leading: const Icon(Icons.dark_mode),
-                      title: const Text('Dark Mode'),
-                      trailing: Switch(
-                        value: false,
-                        onChanged: (value) {
-                          // Handle dark mode toggle
-                        },
-                      ),
-                    ),
+                   
                     ListTile(
                       leading: const Icon(Icons.notifications),
                       title: const Text('Notifications'),
@@ -112,6 +103,16 @@ class SettingsScreenBody extends StatelessWidget {
                         // Handle Help navigation
                       },
                     ),
+                    //  ListTile(
+                    //   leading: const Icon(Icons.dark_mode),
+                    //   title: const Text('Dark Mode'),
+                    //   trailing: Switch(
+                    //     value: false,
+                    //     onChanged: (value) {
+                    //       // Handle dark mode toggle
+                    //     },
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

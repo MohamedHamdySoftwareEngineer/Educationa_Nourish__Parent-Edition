@@ -64,7 +64,7 @@ class GradeScreenBody extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         border: Border.all(color: Colors.grey.shade600),
-                        borderRadius: BorderRadius.circular(60),
+                        borderRadius: BorderRadius.circular(10),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.1),

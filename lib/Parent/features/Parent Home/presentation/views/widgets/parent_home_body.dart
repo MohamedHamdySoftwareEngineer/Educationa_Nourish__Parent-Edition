@@ -52,7 +52,7 @@ class ParentHomeBody extends StatelessWidget {
                           bottom: 40,
                           right: 20)),
                   const BuildIconCard(
-                      label: 'Restaurant',
+                      label: 'Food Place',
                       imagePath: restaurantHome,
                       top: 0,
                       left: 20,

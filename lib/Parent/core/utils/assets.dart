@@ -15,3 +15,5 @@ const mapImage =
     'assets/bus_screen/🌎 Map Maker_ Alexandria, Alexandria, Egypt (Multi Brand Network).png';
 const parentImage = 'assets/parent/images/ParentImage.png';
 const teacherImage = 'assets/parent/images/teacher_image.png';
+const attendenceIcon = 'assets/parent/icons/attendence_icon.svg';
+const calenderIcon = 'assets/parent/icons/Calendar.svg';

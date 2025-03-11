@@ -1,4 +1,5 @@
 import 'package:educational_nourish/Parent/core/utils/app_router.dart';
+import 'package:educational_nourish/Parent/core/utils/assets.dart';
 import 'package:educational_nourish/Parent/core/widgets/base_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -12,7 +13,7 @@ class MyChildScreenBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseScaffold(
         child: Container(
-      padding: const EdgeInsets.only(left: 16.0, bottom: 16, right: 16),
+      padding: const EdgeInsets.only(left: 16.0, right: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -67,7 +68,7 @@ class MyChildScreenBody extends StatelessWidget {
                   },
                   child: const BuildCard(
                     'attendance',
-                    'assets/parent/icons/Calendar.svg',
+                   attendenceIcon,
                   ),
                 ),
                 const BuildCard('food place', 'assets/parent/icons/icon.svg'),

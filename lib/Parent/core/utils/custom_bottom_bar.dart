@@ -13,7 +13,7 @@ class CustomBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Container(
         color: Colors.transparent,
         child: Row(
@@ -27,9 +27,9 @@ class CustomBottomBar extends StatelessWidget {
             ),
             IconButton(
               onPressed: () {
-                GoRouter.of(context).push(AppRouter.rPaymentScreen);
+                GoRouter.of(context).push(AppRouter.rAttendenceScreen);
               },
-              icon: SvgPicture.asset(paymentBottomBar),
+              icon: SvgPicture.asset(attendenceIcon,width: 35,height: 35,),
             ),
             IconButton(
               onPressed: () {

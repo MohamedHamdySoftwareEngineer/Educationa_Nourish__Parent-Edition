@@ -11,7 +11,7 @@ class HeaderTitle extends StatelessWidget {
       padding: EdgeInsets.only( bottom: 16),
       child: Center(
         child: Text(
-          'classes',
+          'Class Schedule',
           style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700),
         ),
       ),

@@ -21,21 +21,21 @@ class SettingsAppBar extends StatelessWidget {
               GoRouter.of(context).push(AppRouter.rParentHome);
             },
           ),
-          const Row(
-            children: [
-              Text(
-                'Log Out',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-              ),
-              SizedBox(
-                width: 5,
-              ),
-              Icon(
-                Icons.logout,
-                size: 30,
-              ),
-            ],
-          )
+          // const Row(
+          //   children: [
+          //     Text(
+          //       'Log Out',
+          //       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+          //     ),
+          //     SizedBox(
+          //       width: 5,
+          //     ),
+          //     Icon(
+          //       Icons.logout,
+          //       size: 30,
+          //     ),
+          //   ],
+          // )
         ],
       ),
     );
