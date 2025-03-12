@@ -22,7 +22,7 @@ class ParentHomeBody extends StatelessWidget {
             Expanded(
               child: GridView.count(
                 crossAxisCount: 2,
-                padding: const EdgeInsets.all(25),
+                padding: const EdgeInsets.symmetric(horizontal: 25,vertical: 10),
                 crossAxisSpacing: 15,
                 mainAxisSpacing: 15,
                 shrinkWrap: true,

@@ -1,3 +1,4 @@
+const logo = 'assets/logo.png';
 const splashScreen = 'assets/splashSceen.png';
 const schoolNews = 'assets/School_News.png';
 const teacherHome = 'assets/Teacher.png';
@@ -17,3 +18,4 @@ const parentImage = 'assets/parent/images/ParentImage.png';
 const teacherImage = 'assets/parent/images/teacher_image.png';
 const attendenceIcon = 'assets/parent/icons/attendence_icon.svg';
 const calenderIcon = 'assets/parent/icons/Calendar.svg';
+const listIcon = 'assets/parent/icons/lists_icon.svg';

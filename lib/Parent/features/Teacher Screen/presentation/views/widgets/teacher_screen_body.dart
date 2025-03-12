@@ -58,17 +58,7 @@ class TeacherScreenBody extends StatelessWidget {
             child: Text("Teachers", style: textBold28),
           ),
 
-          // You can add a subheading or description here
-          const Padding(
-            padding: EdgeInsets.only(left: 20, right: 20, bottom: 16),
-            child: Text(
-              "View your child's teachers for each subject",
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.black54,
-              ),
-            ),
-          ),
+          
             Expanded(
               child: ListView.builder(
                 itemCount: teachers.length,
