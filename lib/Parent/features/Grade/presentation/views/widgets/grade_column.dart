@@ -2,24 +2,51 @@ import 'package:flutter/material.dart';
 
 class GradeColumn extends StatelessWidget {
   final String label;
-  final int grade;
+  final double grade;
+  final bool showIcon;
+  final IconData? icon;
 
   const GradeColumn({
     super.key,
     required this.label,
     required this.grade,
+    this.showIcon = false,
+    this.icon,
   });
 
   @override
   Widget build(BuildContext context) {
+    // Determine color based on grade
+    Color gradeColor;
+    if (grade >= 80) {
+      gradeColor = Colors.green;
+    } else if (grade >= 70) {
+      gradeColor = Colors.orange;
+    } else {
+      gradeColor = Colors.red;
+    }
+
     return Column(
       children: [
-        Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
-        const SizedBox(height: 5),
-        Text('$grade', style: const TextStyle(fontSize: 16)),
+        if (showIcon && icon != null) Icon(icon, size: 20, color: Colors.grey.shade700),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 14,
+            color: Colors.grey.shade700,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          '$grade%',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: gradeColor,
+          ),
+        ),
       ],
     );
   }
 }
-
-// Model class to represent a subject and its grades.

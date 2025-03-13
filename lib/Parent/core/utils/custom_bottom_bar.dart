@@ -21,15 +21,16 @@ class CustomBottomBar extends StatelessWidget {
           children: [
             IconButton(
               onPressed: () {
-                // GoRouter.of(context).push(AppRouter.rAttendenceScreen);
+                GoRouter.of(context).push(AppRouter.rListScreen);
               },
-              icon:  SvgPicture.asset(listIcon,width: 34,height: 34,),
+              icon:  SvgPicture.asset(listIcon,width: 32,height: 32,),
             ),
             IconButton(
               onPressed: () {
                 GoRouter.of(context).push(AppRouter.rSettingsScreen);
               },
               icon: SvgPicture.asset(settingsBottomBar),
+             
             ),
             
             IconButton(
@@ -42,13 +43,15 @@ class CustomBottomBar extends StatelessWidget {
               onPressed: () {
                 GoRouter.of(context).push(AppRouter.rBusScreen);
               },
-              icon: SvgPicture.asset(busBottomBar),
+              
+              icon: const Icon(Icons.directions_bus_sharp,size: 33,color: Colors.black,),
             ),
             IconButton(
               onPressed: () {
                 GoRouter.of(context).push(AppRouter.rParentProfile);
               },
-              icon: SvgPicture.asset(userBottomBar),
+             
+              icon: const Icon(Icons.person,size: 35,color: Colors.black,),
             ),
           ],
         ),

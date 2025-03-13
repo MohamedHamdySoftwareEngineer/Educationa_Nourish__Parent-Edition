@@ -22,84 +22,11 @@ class _AttendenceScreenBodyState extends State<AttendenceScreenBody> {
 
     return BaseScaffold(
       child: SingleChildScrollView(
-        // Remove extra padding
         physics: const ClampingScrollPhysics(),
         child: Column(
           children: [
             // Month selector row with arrows
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                  vertical: 16.0, horizontal: 16.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          currentMonth = DateTime(
-                            currentMonth.year,
-                            currentMonth.month - 1,
-                          );
-                          // Reset selectedDay when changing month
-                          selectedDay = -1;
-                        });
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: const Icon(
-                          Icons.arrow_back_ios_rounded,
-                          color: Colors.black,
-                          size: 18,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 24),
-                    Text(
-                      '${_getMonthName(currentMonth.month)} ${currentMonth.year}',
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(width: 24),
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          currentMonth = DateTime(
-                            currentMonth.year,
-                            currentMonth.month + 1,
-                          );
-                          // Reset selectedDay when changing month
-                          selectedDay = -1;
-                        });
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: const Icon(
-                          Icons.arrow_forward_ios_rounded,
-                          color: Colors.black,
-                          size: 18,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            switchDaysSection(),
 
             const SizedBox(height: 8), // Reduced space
 
@@ -165,6 +92,121 @@ class _AttendenceScreenBodyState extends State<AttendenceScreenBody> {
       ),
     );
   }
+
+  Padding switchDaysSection() {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+    child: Container(
+      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.15),
+            spreadRadius: 2,
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // Previous month button
+          InkWell(
+            onTap: () {
+              setState(() {
+                currentMonth = DateTime(
+                  currentMonth.year,
+                  currentMonth.month - 1,
+                );
+                selectedDay = -1;
+              });
+            },
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF0EDFF),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: const Icon(
+                Icons.arrow_back_ios_rounded,
+                color: Color(0xFF7B5EF8),
+                size: 18,
+              ),
+            ),
+          ),
+          
+          // Month and year display
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF7B5EF8), Color(0xFF5E8CF8)],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
+              borderRadius: BorderRadius.circular(18),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF7B5EF8).withOpacity(0.3),
+                  spreadRadius: 1,
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.calendar_today_rounded,
+                  color: Colors.white,
+                  size: 18,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  '${_getMonthName(currentMonth.month)} ${currentMonth.year}',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          
+          // Next month button
+          InkWell(
+            onTap: () {
+              setState(() {
+                currentMonth = DateTime(
+                  currentMonth.year,
+                  currentMonth.month + 1,
+                );
+                selectedDay = -1;
+              });
+            },
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF0EDFF),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: const Icon(
+                Icons.arrow_forward_ios_rounded,
+                color: Color(0xFF7B5EF8),
+                size: 18,
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
 
   Container moodContainer(double commonWidth) {
     return Container(

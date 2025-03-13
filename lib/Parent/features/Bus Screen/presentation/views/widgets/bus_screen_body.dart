@@ -129,7 +129,7 @@ class BusInfo extends StatelessWidget {
                     ),
                     SizedBox(height: 4),
                     Text(
-                      '10:15 AM',
+                      '01:15 PM',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,

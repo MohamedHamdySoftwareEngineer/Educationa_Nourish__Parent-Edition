@@ -16,8 +16,7 @@ class ExamScreenBody extends StatefulWidget {
   const ExamScreenBody({super.key});
 
   @override
-  State<ExamScreenBody> createState() =>
-      _ExamScreenBodyState(); // Corrected this line
+  State<ExamScreenBody> createState() => _ExamScreenBodyState();
 }
 
 class _ExamScreenBodyState extends State<ExamScreenBody> {
@@ -45,8 +44,46 @@ class _ExamScreenBodyState extends State<ExamScreenBody> {
   String? selectedType;
   String? selectedSubject;
 
-  String _formatExamDate(DateTime dateTime) {
-    return DateFormat('EEE, MMM d, yyyy • h:mm a').format(dateTime);
+  // Get exam type color based on type
+  Color getExamTypeColor(String type) {
+    switch (type) {
+      case 'Midterm':
+        return Colors.amber.shade700;
+      case 'Final':
+        return Colors.red.shade700;
+      case 'Quiz':
+        return Colors.green.shade700;
+      default:
+        return mainColor;
+    }
+  }
+
+  // Get exam icon based on subject
+  IconData getSubjectIcon(String subject) {
+    switch (subject) {
+      case 'Math':
+        return Icons.calculate;
+      case 'Arabic':
+        return Icons.language;
+      case 'English':
+        return Icons.book;
+      case 'Science':
+        return Icons.science;
+      default:
+        return Icons.subject;
+    }
+  }
+
+  
+
+  // Format date only
+  String _formatDate(DateTime dateTime) {
+    return DateFormat('MMM d, yyyy').format(dateTime);
+  }
+
+  // Format time only
+  String _formatTime(DateTime dateTime) {
+    return DateFormat('h:mm a').format(dateTime);
   }
 
   List<Exam> get filteredExams {
@@ -61,8 +98,21 @@ class _ExamScreenBodyState extends State<ExamScreenBody> {
   Widget build(BuildContext context) {
     return BaseScaffold(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildFilterSection(), 
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+            child: Text(
+              'Upcoming Exams',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey.shade800,
+              ),
+            ),
+          ),
+          _buildFilterSection(),
+          const SizedBox(height: 8),
           _buildExamList(),
         ],
       ),
@@ -142,9 +192,33 @@ class _ExamScreenBodyState extends State<ExamScreenBody> {
     );
   }
 
-  
-
   Widget _buildExamList() {
+    if (filteredExams.isEmpty) {
+      return Expanded(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.event_busy,
+                size: 64,
+                color: Colors.grey.shade400,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'No exams found',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey.shade600,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return Expanded(
       child: ListView.builder(
         padding: const EdgeInsets.all(16),
@@ -152,62 +226,104 @@ class _ExamScreenBodyState extends State<ExamScreenBody> {
         itemBuilder: (context, index) {
           final exam = filteredExams[index];
           return Card(
-            elevation: 10,
-            margin: const EdgeInsets.symmetric(vertical: 10),
+            elevation: 3,
+            margin: const EdgeInsets.only(bottom: 16),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(16),
+              side: BorderSide(color: Colors.grey.shade200),
             ),
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      CircleAvatar(
+                        backgroundColor:
+                            getExamTypeColor(exam.type).withOpacity(0.2),
+                        radius: 24,
+                        child: Icon(
+                          getSubjectIcon(exam.subject),
+                          color: getExamTypeColor(exam.type),
+                          size: 26,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
                       Expanded(
-                        child: Text(
-                          exam.subject,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: Colors.black87,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      Container(
-                        width: 90, 
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: mainColor,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Text(
-                          exam.type,
-                          style: mainText18.copyWith(fontSize: 16),
-                          textAlign: TextAlign.center, // Center the text
-                          overflow: TextOverflow.ellipsis, // Handle overflow
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    exam.subject,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 6),
+                                      constraints: const BoxConstraints(
+                                        minWidth: 80,
+                                        maxWidth: 140,
+                                      ),
+                                  decoration: BoxDecoration(
+                                    color: getExamTypeColor(exam.type),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Text(
+                                    exam.type,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Icon(Icons.calendar_today,
+                                    size: 16, color: Colors.grey.shade600),
+                                const SizedBox(width: 6),
+                                Text(
+                                  _formatDate(exam.dateTime),
+                                  style: TextStyle(
+                                    color: Colors.grey.shade700,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                const SizedBox(width: 16),
+                                Icon(Icons.access_time,
+                                    size: 16, color: Colors.grey.shade600),
+                                const SizedBox(width: 6),
+                                Text(
+                                  _formatTime(exam.dateTime),
+                                  style: TextStyle(
+                                    color: Colors.grey.shade700,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Icon(Icons.calendar_today,
-                          size: 16, color: Colors.grey.shade600),
-                      const SizedBox(width: 6),
-                      Text(
-                        _formatExamDate(exam.dateTime),
-                        style: TextStyle(
-                          color: Colors.grey.shade700,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
-                  ),
+                 
                 ],
               ),
             ),

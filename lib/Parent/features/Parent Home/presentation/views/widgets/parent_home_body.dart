@@ -17,19 +17,20 @@ class ParentHomeBody extends StatelessWidget {
           children: [
             // News Box
             ParentSlider(),
-      
+
             // Cards Grid
             Expanded(
               child: GridView.count(
                 crossAxisCount: 2,
-                padding: const EdgeInsets.symmetric(horizontal: 25,vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                 crossAxisSpacing: 15,
                 mainAxisSpacing: 15,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 children: [
                   InkWell(
-                    onTap: (){
+                    onTap: () {
                       GoRouter.of(context).push(AppRouter.rTeacherScreen);
                     },
                     child: const BuildIconCard(
@@ -51,13 +52,18 @@ class ParentHomeBody extends StatelessWidget {
                           left: 20,
                           bottom: 40,
                           right: 20)),
-                  const BuildIconCard(
-                      label: 'Food Place',
-                      imagePath: restaurantHome,
-                      top: 0,
-                      left: 20,
-                      bottom: 40,
-                      right: 20),
+                  InkWell(
+                    onTap: () {
+                      GoRouter.of(context).push(AppRouter.rRestaurantScreen);
+                    },
+                    child: const BuildIconCard(
+                        label: 'Food Place',
+                        imagePath: restaurantHome,
+                        top: 0,
+                        left: 20,
+                        bottom: 40,
+                        right: 20),
+                  ),
                   InkWell(
                     onTap: () {
                       GoRouter.of(context).push(AppRouter.rPaymentScreen);

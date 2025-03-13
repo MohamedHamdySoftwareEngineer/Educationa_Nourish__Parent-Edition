@@ -16,26 +16,13 @@ class SettingsAppBar extends StatelessWidget {
             icon: const Icon(
               Icons.arrow_back_ios,
               size: 30,
+              color: Colors.black,
             ),
             onPressed: () {
               GoRouter.of(context).push(AppRouter.rParentHome);
             },
           ),
-          // const Row(
-          //   children: [
-          //     Text(
-          //       'Log Out',
-          //       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-          //     ),
-          //     SizedBox(
-          //       width: 5,
-          //     ),
-          //     Icon(
-          //       Icons.logout,
-          //       size: 30,
-          //     ),
-          //   ],
-          // )
+         
         ],
       ),
     );

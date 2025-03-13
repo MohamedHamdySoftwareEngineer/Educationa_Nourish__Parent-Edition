@@ -4,11 +4,14 @@ import 'package:educational_nourish/Parent/features/Classes/presentation/views/c
 import 'package:educational_nourish/Parent/features/Exam/presentation/views/Exam_Screen.dart';
 import 'package:educational_nourish/Parent/features/Grade/presentation/views/grade_screen.dart';
 import 'package:educational_nourish/Parent/features/My%20Child%20Screen/presentation/views/my_child_screen.dart';
+import 'package:educational_nourish/Parent/features/Notifications%20Screen/presentation/presentation/views/notifications_screen.dart';
 import 'package:educational_nourish/Parent/features/Parent%20Home/presentation/views/parent_home.dart';
 import 'package:educational_nourish/Parent/features/Parent%20Profile/presentation/views/parent_profile.dart';
 import 'package:educational_nourish/Parent/features/Payment%20Screen/presentation/views/payment.dart';
+import 'package:educational_nourish/Parent/features/Restaurant%20Screen/presentation/views/restaurant_screen.dart';
 import 'package:educational_nourish/Parent/features/Settings%20Screen/presentation/views/settings_screen.dart';
 import 'package:educational_nourish/Parent/features/Teacher%20Screen/presentation/views/teacher_screen.dart';
+import 'package:educational_nourish/Parent/features/List%20Screen/presentation/views/list_screen.dart';
 import 'package:educational_nourish/intro_Screens/choice_screen.dart';
 import 'package:educational_nourish/intro_Screens/on_boarding_screen.dart';
 import 'package:educational_nourish/intro_Screens/splash_screen.dart';
@@ -30,6 +33,9 @@ abstract class AppRouter {
   static const rExamScreen = '/ExamScreen';
   static const rGradeScreen = '/GradeScreen';
   static const rTeacherScreen = '/TeacherScreen';
+  static const rListScreen = '/ListScreen';
+  static const rNotificationsScreen = '/NotificationsScreen';
+  static const rRestaurantScreen = '/rRestaurantScreen';
 
   static GoRoute _buildRoute(String path, Widget child) {
     return GoRoute(
@@ -57,6 +63,9 @@ abstract class AppRouter {
       _buildRoute(rExamScreen, const ExamScreen()),
       _buildRoute(rGradeScreen, const GradeScreen()),
       _buildRoute(rTeacherScreen, const TeacherScreen()),
+      _buildRoute(rListScreen, const ListScreen()),
+      _buildRoute(rNotificationsScreen, const NotificationsScreen()),
+      _buildRoute(rRestaurantScreen, const RestaurantScreen()),
     ],
   );
 }

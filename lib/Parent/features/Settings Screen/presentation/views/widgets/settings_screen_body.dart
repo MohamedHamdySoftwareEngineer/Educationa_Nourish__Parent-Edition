@@ -20,12 +20,12 @@ class SettingsScreenBody extends StatelessWidget {
               backgroundImage:
               AssetImage(parentImage),
             ),
-            const SizedBox(height: 10),
-            const Text(
-              'HI',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 5),
+            const SizedBox(height: 15),
+            // const Text(
+            //   'HI',
+            //   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            // ),
+            // const SizedBox(height: 5),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               decoration: BoxDecoration(

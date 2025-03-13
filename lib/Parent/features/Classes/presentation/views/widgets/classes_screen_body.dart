@@ -55,94 +55,98 @@ class ClassesScreenBody extends StatelessWidget {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
-              Container(
-                width: double.infinity,
-                margin: const EdgeInsets.all(16.0),
-                padding: const EdgeInsets.all(20.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12.0),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.4),
-                      blurRadius: 8,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Column(children: [
-                  // First row - Departure and Arrival Times
-                  Row(
-                    children: [
-                      // Departure Time
-                      const Expanded(
-                        child: Column(
-                          children: [
-                            Icon(Icons.departure_board,
-                                color: Color(0xFF1976D2), size: 28),
-                            SizedBox(height: 8),
-                            Text(
-                              'Departure time',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Color(0xFF757575),
-                              ),
-                            ),
-                            SizedBox(height: 4),
-                            Text(
-                              '08:30 AM',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF1976D2),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      // Divider
-                      Container(
-                        height: 70,
-                        width: 1,
-                        color: const Color(0xFFE0E0E0),
-                      ),
-
-                      // Arrival Time
-                      const Expanded(
-                        child: Column(
-                          children: [
-                            Icon(Icons.access_time_filled,
-                                color: Color(0xFF43A047), size: 28),
-                            SizedBox(height: 8),
-                            Text(
-                              'Arrival time',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Color(0xFF757575),
-                              ),
-                            ),
-                            SizedBox(height: 4),
-                            Text(
-                              '10:15 AM',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF43A047),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ]),
-              ),
+              arrivalInformation(),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Container arrivalInformation() {
+    return Container(
+              width: double.infinity,
+              margin: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(20.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.4),
+                    blurRadius: 8,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Column(children: [
+                // First row - Departure and Arrival Times
+                Row(
+                  children: [
+                    // Departure Time
+                    const Expanded(
+                      child: Column(
+                        children: [
+                          Icon(Icons.departure_board,
+                              color: Color(0xFF1976D2), size: 28),
+                          SizedBox(height: 8),
+                          Text(
+                            'Departure time',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Color(0xFF757575),
+                            ),
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                            '08:30 AM',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF1976D2),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // Divider
+                    Container(
+                      height: 70,
+                      width: 1,
+                      color: const Color(0xFFE0E0E0),
+                    ),
+
+                    // Arrival Time
+                    const Expanded(
+                      child: Column(
+                        children: [
+                          Icon(Icons.access_time_filled,
+                              color: Color(0xFF43A047), size: 28),
+                          SizedBox(height: 8),
+                          Text(
+                            'Arrival time',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Color(0xFF757575),
+                            ),
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                            '01:15 PM',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF43A047),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ]),
+            );
   }
 
   SingleChildScrollView classSchedule() {
