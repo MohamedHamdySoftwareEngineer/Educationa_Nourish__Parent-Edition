@@ -1,5 +1,5 @@
 import 'package:educational_nourish/Parent/features/Parent%20Home/presentation/views/parent_home.dart';
-import 'package:educational_nourish/Student_Interface/Home/home_page.dart';
+
 import 'package:educational_nourish/login/login_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -126,8 +126,8 @@ class ChoiceScreen extends StatelessWidget {
           switch (role) {
             case 'parent':
               return const ParentHome();
-            case 'student':
-              return const HomePage();
+            // case 'student':
+            //   return const HomePage();
             case 'teacher':
               return const LoginScreen();
             default:

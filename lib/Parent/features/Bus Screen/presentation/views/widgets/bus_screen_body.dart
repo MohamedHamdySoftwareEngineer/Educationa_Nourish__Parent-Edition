@@ -1,62 +1,180 @@
-import 'package:educational_nourish/Parent/core/utils/assets.dart';
-import 'package:educational_nourish/Parent/core/widgets/base_scaffold.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:geolocator/geolocator.dart';
 
 class BusScreenBody extends StatelessWidget {
-  const BusScreenBody({super.key});
+  const BusScreenBody({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BaseScaffold(
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Center(
-              child: Text(
-                'BUS',
-                style: TextStyle(fontSize: 32, fontWeight: FontWeight.w700),
-              ),
+    return const SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Text(
+              'Student Location',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
             ),
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                'Map',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
-              ),
+          ),
+          SizedBox(
+            height: 300,
+            child: LiveMap(),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 30, left: 16),
+            child: Text(
+              'Bus schedules',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             ),
-            Center(
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16.0),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                
-                child: Image.asset(mapImage),
-                
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.only(top :30, left: 16),
-              child: Text(
-                'Bus schedules',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-              ),
-            ),
-            const BusInfo(),
-          ],
-        ),
+          ),
+          BusInfo(),
+        ],
       ),
     );
   }
+}
 
-  
-  
+class LiveMap extends StatefulWidget {
+  const LiveMap({Key? key}) : super(key: key);
+
+  @override
+  _LiveMapState createState() => _LiveMapState();
+}
+
+class _LiveMapState extends State<LiveMap> {
+  final MapController _mapController = MapController();
+  LatLng _currentLatLng = LatLng(37.42796133580664, -122.085749655962);
+  Marker? _studentMarker;
+  StreamSubscription<Position>? _positionStream;
+  bool _hasFix = false; // Becomes true once we get our first GPS fix
+
+  @override
+  void initState() {
+    super.initState();
+    _startLocationTracking();
+  }
+
+  Future<void> _startLocationTracking() async {
+    // 1) Check if location services are enabled
+    if (!await Geolocator.isLocationServiceEnabled()) {
+      _showError('Location services are disabled. Please enable GPS.');
+      return;
+    }
+
+    // 2) Request permission if needed
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
+      permission = await Geolocator.requestPermission();
+    }
+    if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
+      _showError('Location permission denied. Please enable in settings.');
+      return;
+    }
+
+    // 3) Get the initial position (with a timeout)
+    try {
+      Position pos = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      ).timeout(const Duration(seconds: 10));
+      _onNewPosition(pos);
+    } catch (e) {
+      debugPrint('Initial GPS fix failed: $e');
+      _showError('Could not get initial location.');
+      return;
+    }
+
+    // 4) Listen for updates with more frequent intervals and minimal distance filtering.
+    // If you're using Geolocator 8.x or earlier, you can pass these parameters directly.
+    // For Geolocator 9.x and above, use the LocationSettings parameter.
+    _positionStream = Geolocator.getPositionStream(
+      // Remove or lower the distanceFilter to get more frequent updates.
+      // For Geolocator 9.x and above you might use:
+      // locationSettings: LocationSettings(
+      //   accuracy: LocationAccuracy.high,
+      //   distanceFilter: 0, // Emit every update regardless of movement.
+      //   timeInterval: 1000, // 1000 ms, i.e., every second
+      // ),
+      desiredAccuracy: LocationAccuracy.high,
+      distanceFilter: 0, // Set to 0 for updates on every location change.
+    ).listen(_onNewPosition);
+  }
+
+  void _onNewPosition(Position pos) {
+    final latLng = LatLng(pos.latitude, pos.longitude);
+
+    setState(() {
+      _currentLatLng = latLng;
+      _studentMarker = Marker(
+        width: 40,
+        height: 40,
+        point: latLng,
+        builder: (_) => const Icon(
+          Icons.location_on,
+          size: 40,
+          color: Colors.blueAccent,
+        ),
+      );
+      _hasFix = true;
+    });
+
+    // Immediately move the map to the new location.
+    // Optionally, you could implement an animated map movement instead.
+    _mapController.move(latLng, _mapController.zoom);
+  }
+
+  void _showError(String message) {
+    setState(() {
+      _hasFix = true; // So the spinner goes away.
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _positionStream?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        // 1) Display the map.
+        FlutterMap(
+          mapController: _mapController,
+          options: MapOptions(
+            center: _currentLatLng,
+            zoom: 16.0,
+          ),
+          children: [
+            TileLayer(
+              urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+              subdomains: const ['a', 'b', 'c'],
+              userAgentPackageName: 'com.example.your_app',
+            ),
+            if (_studentMarker != null)
+              MarkerLayer(markers: [_studentMarker!]),
+          ],
+        ),
+
+        // 2) Display a loading spinner until the first fix is received.
+        if (!_hasFix)
+          const Center(child: CircularProgressIndicator()),
+      ],
+    );
+  }
 }
 
 class BusInfo extends StatelessWidget {
-  const BusInfo({super.key});
+  const BusInfo({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -74,137 +192,64 @@ class BusInfo extends StatelessWidget {
             offset: const Offset(0, 3),
           ),
         ],
-        
       ),
       child: Column(
         children: [
-          // First row - Departure and Arrival Times
+          // Departure & Arrival information
           Row(
             children: [
-              // Departure Time
               const Expanded(
                 child: Column(
                   children: [
                     Icon(Icons.departure_board, color: Color(0xFF1976D2), size: 28),
                     SizedBox(height: 8),
-                    Text(
-                      'Departure time',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Color(0xFF757575),
-                      ),
-                    ),
+                    Text('Departure time', style: TextStyle(fontSize: 14, color: Color(0xFF757575))),
                     SizedBox(height: 4),
-                    Text(
-                      '08:30 AM',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF1976D2),
-                      ),
-                    ),
+                    Text('08:30 AM', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF1976D2))),
                   ],
                 ),
               ),
-              
-              // Divider
-              Container(
-                height: 70,
-                width: 1,
-                color: const Color(0xFFE0E0E0),
-              ),
-              
-              // Arrival Time
+              Container(height: 70, width: 1, color: Color(0xFFE0E0E0)),
               const Expanded(
                 child: Column(
                   children: [
                     Icon(Icons.access_time_filled, color: Color(0xFF43A047), size: 28),
                     SizedBox(height: 8),
-                    Text(
-                      'Arrival time',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Color(0xFF757575),
-                      ),
-                    ),
+                    Text('Arrival time', style: TextStyle(fontSize: 14, color: Color(0xFF757575))),
                     SizedBox(height: 4),
-                    Text(
-                      '01:15 PM',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF43A047),
-                      ),
-                    ),
+                    Text('01:15 PM', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF43A047))),
                   ],
                 ),
               ),
             ],
           ),
-          
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 16.0),
             child: Divider(thickness: 1),
           ),
-          
-          // Second row - Driver and Bus Number
+          // Driver & Bus Number information
           Row(
             children: [
-              // Driver Name
               const Expanded(
                 child: Column(
                   children: [
                     Icon(Icons.person, color: Color(0xFFD84315), size: 28),
                     SizedBox(height: 8),
-                    Text(
-                      'Driver name',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Color(0xFF757575),
-                      ),
-                    ),
+                    Text('Driver name', style: TextStyle(fontSize: 14, color: Color(0xFF757575))),
                     SizedBox(height: 4),
-                    Text(
-                      'John Smith',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFFD84315),
-                      ),
-                    ),
+                    Text('John Smith', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFFD84315))),
                   ],
                 ),
               ),
-              
-              // Divider
-              Container(
-                height: 70,
-                width: 1,
-                color: const Color(0xFFE0E0E0),
-              ),
-              
-              // Bus Number
+              Container(height: 70, width: 1, color: Color(0xFFE0E0E0)),
               const Expanded(
                 child: Column(
                   children: [
                     Icon(Icons.directions_bus, color: Color(0xFF7B1FA2), size: 28),
                     SizedBox(height: 8),
-                    Text(
-                      'Bus No.',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Color(0xFF757575),
-                      ),
-                    ),
+                    Text('Bus No.', style: TextStyle(fontSize: 14, color: Color(0xFF757575))),
                     SizedBox(height: 4),
-                    Text(
-                      'BUS-1234',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF7B1FA2),
-                      ),
-                    ),
+                    Text('BUS-1234', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF7B1FA2))),
                   ],
                 ),
               ),

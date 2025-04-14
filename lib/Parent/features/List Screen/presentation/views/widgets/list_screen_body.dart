@@ -3,12 +3,11 @@ import 'package:educational_nourish/Parent/core/widgets/base_scaffold.dart';
 import 'package:educational_nourish/Parent/features/Attendence%20Screen/presentation/views/attendence_screen.dart';
 import 'package:educational_nourish/Parent/features/Classes/presentation/views/classes_screen.dart';
 import 'package:educational_nourish/Parent/features/Exam/presentation/views/exam_screen.dart';
-import 'package:educational_nourish/Parent/features/Parent%20Home/presentation/views/parent_home.dart';
 import 'package:educational_nourish/Parent/features/Parent%20Profile/presentation/views/parent_profile.dart';
 import 'package:educational_nourish/Parent/features/Restaurant%20Screen/presentation/views/restaurant_screen.dart';
 import 'package:educational_nourish/Parent/features/Settings%20Screen/presentation/views/settings_screen.dart';
 import 'package:educational_nourish/Parent/features/Teacher%20Screen/presentation/views/teacher_screen.dart';
-import 'package:educational_nourish/Student_Interface/Home/Restaurant.dart';
+
 import 'package:flutter/material.dart';
 
 class ListScreenBody extends StatelessWidget {
