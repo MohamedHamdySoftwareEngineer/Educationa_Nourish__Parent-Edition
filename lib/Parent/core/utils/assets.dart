@@ -17,3 +17,4 @@ const teacherImage = 'assets/parent/images/teacher_image.png';
 const attendenceIcon = 'assets/parent/icons/attendence_icon.svg';
 const calenderIcon = 'assets/parent/icons/Calendar.svg';
 const listIcon = 'assets/parent/icons/lists_icon.svg';
+const mealImage = 'assets/parent/images/meal.jpg';

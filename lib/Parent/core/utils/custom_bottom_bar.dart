@@ -25,20 +25,7 @@ class CustomBottomBar extends StatelessWidget {
               },
               icon:  SvgPicture.asset(listIcon,width: 32,height: 32,),
             ),
-            IconButton(
-              onPressed: () {
-                GoRouter.of(context).push(AppRouter.rSettingsScreen);
-              },
-              icon: SvgPicture.asset(settingsBottomBar),
-             
-            ),
             
-            IconButton(
-              onPressed: () {
-                GoRouter.of(context).push(AppRouter.rParentHome);
-              },
-              icon: SvgPicture.asset(homeIconBottomBar),
-            ),
             IconButton(
               onPressed: () {
                 GoRouter.of(context).push(AppRouter.rBusScreen);
@@ -48,10 +35,23 @@ class CustomBottomBar extends StatelessWidget {
             ),
             IconButton(
               onPressed: () {
-                GoRouter.of(context).push(AppRouter.rParentProfile);
+                GoRouter.of(context).push(AppRouter.rParentHome);
+              },
+              icon: SvgPicture.asset(homeIconBottomBar),
+            ),
+            IconButton(
+              onPressed: () {
+                GoRouter.of(context).push(AppRouter.rGradeScreen);
               },
              
-              icon: const Icon(Icons.person,size: 35,color: Colors.black,),
+              icon: SvgPicture.asset('assets/parent/icons/Star.svg'),
+            ),
+            IconButton(
+              onPressed: () {
+                GoRouter.of(context).push(AppRouter.rSettingsScreen);
+              },
+              icon: SvgPicture.asset(settingsBottomBar),
+             
             ),
           ],
         ),
