@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:educational_nourish/Parent/constants.dart';
+import 'package:educational_nourish/Parent/core/utils/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -32,9 +33,11 @@ class BusScreenBody extends StatelessWidget {
               const SizedBox(height: 50,),
               const Padding(
                 padding: EdgeInsets.all(16.0),
-                child: Text(
-                  'Student Location',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+                child: Center(
+                  child: Text(
+                    'Student Location',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                  ),
                 ),
               ),
               // Map placed inside a Card with rounded corners and elevation.
@@ -68,13 +71,13 @@ class BusScreenBody extends StatelessWidget {
 }
 
 class LiveMap extends StatefulWidget {
-  const LiveMap({Key? key}) : super(key: key);
+  const LiveMap({super.key});
 
   @override
-  _LiveMapState createState() => _LiveMapState();
+  LiveMapState createState() => LiveMapState();
 }
 
-class _LiveMapState extends State<LiveMap> {
+class LiveMapState extends State<LiveMap> {
   final MapController _mapController = MapController();
   LatLng _currentLatLng = LatLng(37.42796133580664, -122.085749655962);
   Marker? _studentMarker;
@@ -171,13 +174,17 @@ class _LiveMapState extends State<LiveMap> {
           mapController: _mapController,
           options: MapOptions(
             center: _currentLatLng,
-            zoom: 16.0,
+            minZoom: 3,
+            maxZoom: 18,
+            zoom: 14.0,
+           
           ),
           children: [
             TileLayer(
               urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
               subdomains: const ['a', 'b', 'c'],
               userAgentPackageName: 'com.example.your_app',
+              
             ),
             if (_studentMarker != null)
               MarkerLayer(markers: [_studentMarker!]),
