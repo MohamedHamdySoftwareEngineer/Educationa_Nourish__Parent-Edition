@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:educational_nourish/Parent/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -9,30 +10,58 @@ class BusScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Text(
-              'Student Location',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
-            ),
+    return Scaffold(
+      
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              firstGradientColor,
+              secondGradientColor,
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
-          SizedBox(
-            height: 300,
-            child: LiveMap(),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 50,),
+              const Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Text(
+                  'Student Location',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+                ),
+              ),
+              // Map placed inside a Card with rounded corners and elevation.
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
+                  clipBehavior: Clip.antiAlias,
+                  child: const SizedBox(
+                    height: 300,
+                    child: LiveMap(),
+                  ),
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.only(top: 30, left: 16),
+                child: Text(
+                  'Bus schedules',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                ),
+              ),
+              const BusInfo(),
+            ],
           ),
-          Padding(
-            padding: EdgeInsets.only(top: 30, left: 16),
-            child: Text(
-              'Bus schedules',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-            ),
-          ),
-          BusInfo(),
-        ],
+        ),
       ),
     );
   }
@@ -50,7 +79,7 @@ class _LiveMapState extends State<LiveMap> {
   LatLng _currentLatLng = LatLng(37.42796133580664, -122.085749655962);
   Marker? _studentMarker;
   StreamSubscription<Position>? _positionStream;
-  bool _hasFix = false; // Becomes true once we get our first GPS fix
+  bool _hasFix = false; // True once the first GPS fix is received
 
   @override
   void initState() {
@@ -59,23 +88,25 @@ class _LiveMapState extends State<LiveMap> {
   }
 
   Future<void> _startLocationTracking() async {
-    // 1) Check if location services are enabled
+    // 1) Check if location services are enabled.
     if (!await Geolocator.isLocationServiceEnabled()) {
       _showError('Location services are disabled. Please enable GPS.');
       return;
     }
 
-    // 2) Request permission if needed
+    // 2) Request permission if needed.
     LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
       permission = await Geolocator.requestPermission();
     }
-    if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
       _showError('Location permission denied. Please enable in settings.');
       return;
     }
 
-    // 3) Get the initial position (with a timeout)
+    // 3) Get the initial position with a timeout.
     try {
       Position pos = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
@@ -87,25 +118,15 @@ class _LiveMapState extends State<LiveMap> {
       return;
     }
 
-    // 4) Listen for updates with more frequent intervals and minimal distance filtering.
-    // If you're using Geolocator 8.x or earlier, you can pass these parameters directly.
-    // For Geolocator 9.x and above, use the LocationSettings parameter.
+    // 4) Listen for updates.
     _positionStream = Geolocator.getPositionStream(
-      // Remove or lower the distanceFilter to get more frequent updates.
-      // For Geolocator 9.x and above you might use:
-      // locationSettings: LocationSettings(
-      //   accuracy: LocationAccuracy.high,
-      //   distanceFilter: 0, // Emit every update regardless of movement.
-      //   timeInterval: 1000, // 1000 ms, i.e., every second
-      // ),
       desiredAccuracy: LocationAccuracy.high,
-      distanceFilter: 0, // Set to 0 for updates on every location change.
+      distanceFilter: 0, // Update on every location change.
     ).listen(_onNewPosition);
   }
 
   void _onNewPosition(Position pos) {
     final latLng = LatLng(pos.latitude, pos.longitude);
-
     setState(() {
       _currentLatLng = latLng;
       _studentMarker = Marker(
@@ -121,14 +142,13 @@ class _LiveMapState extends State<LiveMap> {
       _hasFix = true;
     });
 
-    // Immediately move the map to the new location.
-    // Optionally, you could implement an animated map movement instead.
+    // Always move the map to the new location.
     _mapController.move(latLng, _mapController.zoom);
   }
 
   void _showError(String message) {
     setState(() {
-      _hasFix = true; // So the spinner goes away.
+      _hasFix = true;
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -147,7 +167,6 @@ class _LiveMapState extends State<LiveMap> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // 1) Display the map.
         FlutterMap(
           mapController: _mapController,
           options: MapOptions(
@@ -164,8 +183,6 @@ class _LiveMapState extends State<LiveMap> {
               MarkerLayer(markers: [_studentMarker!]),
           ],
         ),
-
-        // 2) Display a loading spinner until the first fix is received.
         if (!_hasFix)
           const Center(child: CircularProgressIndicator()),
       ],
@@ -209,7 +226,7 @@ class BusInfo extends StatelessWidget {
                   ],
                 ),
               ),
-              Container(height: 70, width: 1, color: Color(0xFFE0E0E0)),
+              Container(height: 70, width: 1, color: const Color(0xFFE0E0E0)),
               const Expanded(
                 child: Column(
                   children: [
@@ -241,7 +258,7 @@ class BusInfo extends StatelessWidget {
                   ],
                 ),
               ),
-              Container(height: 70, width: 1, color: Color(0xFFE0E0E0)),
+              Container(height: 70, width: 1, color: const Color(0xFFE0E0E0)),
               const Expanded(
                 child: Column(
                   children: [
