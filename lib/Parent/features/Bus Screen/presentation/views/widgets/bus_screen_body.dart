@@ -1,27 +1,24 @@
-import 'dart:async';
-import 'package:educational_nourish/Parent/constants.dart';
-import 'package:educational_nourish/Parent/core/utils/styles.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
-import 'package:geolocator/geolocator.dart';
+import 'dart:async'; // استيراد مكتبة التعامل مع التدفقات الزمنية
+import 'package:educational_nourish/Parent/constants.dart'; // استيراد الثوابت العامة للتطبيق
+import 'package:educational_nourish/Parent/features/Bus%20Screen/presentation/views/widgets/bus_info.dart'; // استيراد ويدجت جدول مواعيد الباص
+import 'package:flutter/material.dart'; // استيراد عناصر الواجهة من فلاتر
+import 'package:flutter_map/flutter_map.dart'; // استيراد مكتبة الخرائط
+import 'package:latlong2/latlong.dart'; // استيراد مكتبة النقاط الجغرافية
+import 'package:geolocator/geolocator.dart'; // استيراد مكتبة تحديد الموقع
 
+// الواجهة الرئيسية لشاشة الباص
 class BusScreenBody extends StatelessWidget {
-  const BusScreenBody({Key? key}) : super(key: key);
+  const BusScreenBody({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       body: Container(
-        width: double.infinity,
-        height: double.infinity,
+        width: double.infinity, // عرض كامل الشاشة
+        height: double.infinity, // ارتفاع كامل الشاشة
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [
-              firstGradientColor,
-              secondGradientColor,
-            ],
+            colors: [firstGradientColor, secondGradientColor], // تدرج الألوان من الأعلى للأسفل
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -30,38 +27,38 @@ class BusScreenBody extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 50,),
+              const SizedBox(height: 50), // مسافة علوية ثابتة
               const Padding(
                 padding: EdgeInsets.all(16.0),
                 child: Center(
                   child: Text(
-                    'Student Location',
+                    'Student Location', // عنوان القسم
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
-              // Map placed inside a Card with rounded corners and elevation.
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0), // حواف أفقية
                 child: Card(
-                  elevation: 4,
+                  elevation: 4, // الظل
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
+                    borderRadius: BorderRadius.circular(12), // زوايا مستديرة
+                  ),
                   clipBehavior: Clip.antiAlias,
                   child: const SizedBox(
-                    height: 300,
-                    child: LiveMap(),
+                    height: 300, // ارتفاع ثابت للحاوية
+                    child: LiveMap(),  // ويدجت الخريطة المبسطة
                   ),
                 ),
               ),
               const Padding(
-                padding: EdgeInsets.only(top: 30, left: 16),
+                padding: EdgeInsets.only(top: 30, left: 16), // مسافة من الأعلى واليسار
                 child: Text(
-                  'Bus schedules',
+                  'Bus schedules', // عنوان جدول المواعيد
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                 ),
               ),
-              const BusInfo(),
+              const BusInfo(), // ويدجت جدول المواعيد
             ],
           ),
         ),
@@ -70,6 +67,7 @@ class BusScreenBody extends StatelessWidget {
   }
 }
 
+// ويدجت عرض الخريطة والتتبع
 class LiveMap extends StatefulWidget {
   const LiveMap({super.key});
 
@@ -78,81 +76,99 @@ class LiveMap extends StatefulWidget {
 }
 
 class LiveMapState extends State<LiveMap> {
-  final MapController _mapController = MapController();
-  LatLng _currentLatLng = LatLng(37.42796133580664, -122.085749655962);
-  Marker? _studentMarker;
-  StreamSubscription<Position>? _positionStream;
-  bool _hasFix = false; // True once the first GPS fix is received
+  final MapController _mapController = MapController(); // متحكم في الخريطة
+  LatLng? _currentLatLng; // لتخزين موقع الطالب الحالي
 
+  // النقطة الثابتة (المكان الوجهة)
+  final LatLng _destination = LatLng(30.900731, 29.875344);
+  late final Marker _destinationMarker = Marker(
+    width: 40,
+    height: 40,
+    point: _destination,
+    builder: (_) => const Icon(
+      Icons.school, // أيقونة المدرسة
+      size: 40,
+      color: Colors.redAccent,
+    ),
+  );
+
+  Marker? _studentMarker; // وسم موقع الطالب
+  StreamSubscription<Position>? _positionStream; // تيار التحديثات
+  bool _firstFix = true; // للتحكم بتحريك الخريطة لأول مرة
+
+  // Runs after constructor and before build
   @override
   void initState() {
     super.initState();
-    _startLocationTracking();
+    _startLocationTracking(); // بدء تتبع الموقع عند التشغيل
   }
 
+  // دالة لبدء تتبع الموقع وصلاحيات GPS
   Future<void> _startLocationTracking() async {
-    // 1) Check if location services are enabled.
     if (!await Geolocator.isLocationServiceEnabled()) {
-      _showError('Location services are disabled. Please enable GPS.');
+      _showError('😊 يسطا gps شغل ال'); // رسالة خطأ
       return;
     }
-
-    // 2) Request permission if needed.
-    LocationPermission permission = await Geolocator.checkPermission();
+    var permission = await Geolocator.checkPermission(); // تحقق من صلاحيات الموقع
     if (permission == LocationPermission.denied ||
         permission == LocationPermission.deniedForever) {
-      permission = await Geolocator.requestPermission();
-    }
-    if (permission == LocationPermission.denied ||
-        permission == LocationPermission.deniedForever) {
-      _showError('Location permission denied. Please enable in settings.');
-      return;
+      permission = await Geolocator.requestPermission(); // طلب صلاحيات جديدة
+      if (permission == LocationPermission.denied ||
+          permission == LocationPermission.deniedForever) {
+        _showError('Location permission denied. Please enable in settings.');
+        return;
+      }
     }
 
-    // 3) Get the initial position with a timeout.
     try {
-      Position pos = await Geolocator.getCurrentPosition(
+      // الحصول على أول موقع بدقة عالية
+      final pos = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
-      ).timeout(const Duration(seconds: 10));
-      _onNewPosition(pos);
+      ).timeout(const Duration(seconds: 30));
+      _updatePosition(pos); // تحديث الواجهة بالموقع الأول
     } catch (e) {
       debugPrint('Initial GPS fix failed: $e');
       _showError('Could not get initial location.');
       return;
     }
-
-    // 4) Listen for updates.
+    // One‑time vs. continuous: getCurrentPosition() = one snapshot. getPositionStream() = ongoing feed.
+    // الاستماع للتغيرات في الموقع
     _positionStream = Geolocator.getPositionStream(
       desiredAccuracy: LocationAccuracy.high,
-      distanceFilter: 0, // Update on every location change.
-    ).listen(_onNewPosition);
+      distanceFilter: 0,        /*Typical usage
+0: “I want all updates,” e.g. for very fine‑grained motion tracking.
+
+10: “Only notify me when the user moves ≥ 10 meters,” e.g. for a walking app where sub‑10 m changes aren’t critical.
+
+50+: Good for vehicle‑based use, where you only care about significant displacements. */
+    ).listen(_updatePosition);
   }
 
-  void _onNewPosition(Position pos) {
+  // دالة لتحديث موقع الطالب على الخريطة
+  void _updatePosition(Position pos) {
     final latLng = LatLng(pos.latitude, pos.longitude);
-    setState(() {
-      _currentLatLng = latLng;
-      _studentMarker = Marker(
-        width: 40,
-        height: 40,
-        point: latLng,
-        builder: (_) => const Icon(
-          Icons.location_on,
-          size: 40,
-          color: Colors.blueAccent,
-        ),
-      );
-      _hasFix = true;
-    });
-
-    // Always move the map to the new location.
-    _mapController.move(latLng, _mapController.zoom);
+    _currentLatLng = latLng; // تخزين الموقع الجديد
+    _studentMarker = Marker(
+      width: 40,
+      height: 40,
+      point: latLng,
+      builder: (_) => const Icon(
+        Icons.location_on,       // أيقونة الطالب
+        size: 40,
+        color: Colors.blueAccent,
+      ),
+    );
+    // اول ما الخريطة تظهر بخلي الايقون في النص وبخلي دا لأول مرة فقط
+    if (_firstFix) {
+      _mapController.move(latLng, 14.0); // تحريك الخريطة إلى موقع الطالب
+      _firstFix = false; // تعطيل التحريك للمرة الأولى فقط
+    }
+    // عشان تعلِن إنّ في حاجة جديدة لازم يُعاد بناء الودجت.
+    setState(() {}); // إعادة بناء الواجهة
   }
 
+  // دالة عرض رسالة خطأ لمستخدم
   void _showError(String message) {
-    setState(() {
-      _hasFix = true;
-    });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(message)),
@@ -162,125 +178,33 @@ class LiveMapState extends State<LiveMap> {
 
   @override
   void dispose() {
-    _positionStream?.cancel();
+    _positionStream?.cancel(); // إيقاف الاستماع لتغيرات الموقع
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return FlutterMap(
+      mapController: _mapController,
+      options: MapOptions(
+        center: _currentLatLng ?? _destination, // تحديد مركز الخريطة
+        zoom: 14.0,
+        minZoom: 3,
+        maxZoom: 18,
+      ),
       children: [
-        FlutterMap(
-          mapController: _mapController,
-          options: MapOptions(
-            center: _currentLatLng,
-            minZoom: 3,
-            maxZoom: 18,
-            zoom: 14.0,
-           
-          ),
-          children: [
-            TileLayer(
-              urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-              subdomains: const ['a', 'b', 'c'],
-              userAgentPackageName: 'com.example.your_app',
-              
-            ),
-            if (_studentMarker != null)
-              MarkerLayer(markers: [_studentMarker!]),
+        TileLayer(
+          urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', // خريطة OpenStreetMap
+          subdomains: const ['a', 'b', 'c'],
+          userAgentPackageName: 'com.example.your_app',
+        ),
+        MarkerLayer(
+          markers: [
+            if (_studentMarker != null) _studentMarker!, // وسم الطالب إذا متوفر
+            _destinationMarker, // وسم الوجهة الثابتة
           ],
         ),
-        if (!_hasFix)
-          const Center(child: CircularProgressIndicator()),
       ],
-    );
-  }
-}
-
-class BusInfo extends StatelessWidget {
-  const BusInfo({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.all(16.0),
-      padding: const EdgeInsets.all(20.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.4),
-            blurRadius: 8,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          // Departure & Arrival information
-          Row(
-            children: [
-              const Expanded(
-                child: Column(
-                  children: [
-                    Icon(Icons.departure_board, color: Color(0xFF1976D2), size: 28),
-                    SizedBox(height: 8),
-                    Text('Departure time', style: TextStyle(fontSize: 14, color: Color(0xFF757575))),
-                    SizedBox(height: 4),
-                    Text('08:30 AM', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF1976D2))),
-                  ],
-                ),
-              ),
-              Container(height: 70, width: 1, color: const Color(0xFFE0E0E0)),
-              const Expanded(
-                child: Column(
-                  children: [
-                    Icon(Icons.access_time_filled, color: Color(0xFF43A047), size: 28),
-                    SizedBox(height: 8),
-                    Text('Arrival time', style: TextStyle(fontSize: 14, color: Color(0xFF757575))),
-                    SizedBox(height: 4),
-                    Text('01:15 PM', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF43A047))),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 16.0),
-            child: Divider(thickness: 1),
-          ),
-          // Driver & Bus Number information
-          Row(
-            children: [
-              const Expanded(
-                child: Column(
-                  children: [
-                    Icon(Icons.person, color: Color(0xFFD84315), size: 28),
-                    SizedBox(height: 8),
-                    Text('Driver name', style: TextStyle(fontSize: 14, color: Color(0xFF757575))),
-                    SizedBox(height: 4),
-                    Text('John Smith', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFFD84315))),
-                  ],
-                ),
-              ),
-              Container(height: 70, width: 1, color: const Color(0xFFE0E0E0)),
-              const Expanded(
-                child: Column(
-                  children: [
-                    Icon(Icons.directions_bus, color: Color(0xFF7B1FA2), size: 28),
-                    SizedBox(height: 8),
-                    Text('Bus No.', style: TextStyle(fontSize: 14, color: Color(0xFF757575))),
-                    SizedBox(height: 4),
-                    Text('BUS-1234', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF7B1FA2))),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
     );
   }
 }
