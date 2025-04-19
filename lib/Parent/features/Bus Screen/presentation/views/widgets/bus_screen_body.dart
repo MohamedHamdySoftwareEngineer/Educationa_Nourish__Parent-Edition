@@ -6,9 +6,24 @@ import 'package:flutter_map/flutter_map.dart'; // استيراد مكتبة ال
 import 'package:latlong2/latlong.dart'; // استيراد مكتبة النقاط الجغرافية
 import 'package:geolocator/geolocator.dart'; // استيراد مكتبة تحديد الموقع
 
-// الواجهة الرئيسية لشاشة الباص
-class BusScreenBody extends StatelessWidget {
+// الواجهة الرئيسية لشاشة الباص مع إمكانية السحب للتحديث
+class BusScreenBody extends StatefulWidget {
   const BusScreenBody({super.key});
+
+  @override
+  _BusScreenBodyState createState() => _BusScreenBodyState();
+}
+
+class _BusScreenBodyState extends State<BusScreenBody> {
+  int _mapRefreshKey = 0; // مفتاح لإعادة إنشاء ويدجت الخريطة عند التحديث
+
+  // دالة التعامل مع السحب للتحديث
+  Future<void> _handleRefresh() async {
+    // عند السحب لإعادة تحميل الخريطة تماماً كأول دخول
+    setState(() {
+      _mapRefreshKey++; // تغيير المفتاح لإعادة بناء LiveMap
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,43 +38,48 @@ class BusScreenBody extends StatelessWidget {
             end: Alignment.bottomCenter,
           ),
         ),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 50), // مسافة علوية ثابتة
-              const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Center(
+        child: RefreshIndicator(
+          onRefresh: _handleRefresh, // ربط السحب مع الدالة
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(), // للسماح بالتمرير حتى لو المحتوى صغير
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 50), // مسافة علوية ثابتة
+                const Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Center(
+                    child: Text(
+                      'Student Location', // عنوان القسم
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0), // حواف أفقية
+                  child: Card(
+                    elevation: 4, // الظل
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12), // زوايا مستديرة
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: SizedBox(
+                      height: 300, // ارتفاع ثابت للحاوية
+                      // هذا المفتاح يخبر فلاتر: «إذا تغيّر المفتاح، اعتبر هذا الودجت جديد ولا ترجع تستخدم الحالة القديمة.»
+                      child: LiveMap(key: ValueKey(_mapRefreshKey)),  
+                    ),
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(top: 30, left: 16), // مسافة من الأعلى واليسار
                   child: Text(
-                    'Student Location', // عنوان القسم
+                    'Bus schedules', // عنوان جدول المواعيد
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0), // حواف أفقية
-                child: Card(
-                  elevation: 4, // الظل
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12), // زوايا مستديرة
-                  ),
-                  clipBehavior: Clip.antiAlias,
-                  child: const SizedBox(
-                    height: 300, // ارتفاع ثابت للحاوية
-                    child: LiveMap(),  // ويدجت الخريطة المبسطة
-                  ),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.only(top: 30, left: 16), // مسافة من الأعلى واليسار
-                child: Text(
-                  'Bus schedules', // عنوان جدول المواعيد
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                ),
-              ),
-              const BusInfo(), // ويدجت جدول المواعيد
-            ],
+                const BusInfo(), // ويدجت جدول المواعيد
+              ],
+            ),
           ),
         ),
       ),
@@ -67,8 +87,9 @@ class BusScreenBody extends StatelessWidget {
   }
 }
 
-// ويدجت عرض الخريطة والتتبع
+// ويدجت عرض الخريطة والتتبع (لم يتغير)
 class LiveMap extends StatefulWidget {
+  //  الـ Key يخبرها «لو الودجت تغيّر مفتاحه، اعتبره جديد» وإلا خليك على القديم.
   const LiveMap({super.key});
 
   @override
@@ -106,7 +127,7 @@ class LiveMapState extends State<LiveMap> {
   // دالة لبدء تتبع الموقع وصلاحيات GPS
   Future<void> _startLocationTracking() async {
     if (!await Geolocator.isLocationServiceEnabled()) {
-      _showError('😊 يسطا gps شغل ال'); // رسالة خطأ
+      _showError('😊يسطا gps شغل ال'); // رسالة خطأ
       return;
     }
     var permission = await Geolocator.checkPermission(); // تحقق من صلاحيات الموقع
@@ -127,7 +148,7 @@ class LiveMapState extends State<LiveMap> {
       ).timeout(const Duration(seconds: 30));
       _updatePosition(pos); // تحديث الواجهة بالموقع الأول
     } catch (e) {
-      debugPrint('Initial GPS fix failed: $e');
+      debugPrint('Initial GPS fix failed: \$e');
       _showError('Could not get initial location.');
       return;
     }
@@ -135,12 +156,7 @@ class LiveMapState extends State<LiveMap> {
     // الاستماع للتغيرات في الموقع
     _positionStream = Geolocator.getPositionStream(
       desiredAccuracy: LocationAccuracy.high,
-      distanceFilter: 0,        /*Typical usage
-0: “I want all updates,” e.g. for very fine‑grained motion tracking.
-
-10: “Only notify me when the user moves ≥ 10 meters,” e.g. for a walking app where sub‑10 m changes aren’t critical.
-
-50+: Good for vehicle‑based use, where you only care about significant displacements. */
+      distanceFilter: 0,
     ).listen(_updatePosition);
   }
 
