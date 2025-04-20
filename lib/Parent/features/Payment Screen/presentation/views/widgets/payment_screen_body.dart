@@ -1,162 +1,171 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class PaymentScreenBody extends StatelessWidget {
+// Define the custom colors
+const Color lightGrayBackground = Color(0xFFF7F7F7);
+const Color tealAccentColor = Color(0xFF209CA5);
+const Color myBlackColor = Color(0xff1A1A1A);
+
+class PaymentScreenBody extends StatefulWidget {
   const PaymentScreenBody({super.key});
+
+  @override
+  State<PaymentScreenBody> createState() => _PaymentScreenBodyState();
+}
+
+class _PaymentScreenBodyState extends State<PaymentScreenBody> {
+  final TextEditingController _amountController = TextEditingController();
+  bool _isProcessing = false;
+  String? _paymentStatus;
+  bool _isSuccess = false;
+
+  void _processPayment() {
+    // Validate amount
+    if (_amountController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter an amount'),
+          backgroundColor: tealAccentColor,
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      _isProcessing = true;
+      _paymentStatus = null;
+    });
+
+    // Simulate payment processing
+    Future.delayed(const Duration(seconds: 2), () {
+      setState(() {
+        _isProcessing = false;
+        
+        // Simulate random success/failure for demo purposes
+        _isSuccess = DateTime.now().millisecondsSinceEpoch % 2 == 0;
+        _paymentStatus = _isSuccess 
+          ? 'Payment Successful!' 
+          : 'Payment Failed. Please try again.';
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _amountController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F7F7),
+      backgroundColor: lightGrayBackground,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
         title: const Text(
-          'Balance',
-          style: TextStyle(
-            color: Colors.black87,
-            fontWeight: FontWeight.w500,
-          ),
+          'Payment',
+          style: TextStyle(color: myBlackColor),
         ),
         centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black54),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+        backgroundColor: lightGrayBackground,
+        elevation: 0,
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 20),
-              // Current Balance Card
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF209CA5  ),
-                  borderRadius: BorderRadius.circular(15),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(height: 40),
+            // Payment Icon
+            const Icon(
+              Icons.account_balance_wallet,
+              size: 64,
+              color: tealAccentColor,
+            ),
+            const SizedBox(height: 30),
+            // Amount input field
+            TextField(
+              controller: _amountController,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              inputFormatters: [
+                
+                FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,3}')),
+              ],
+              decoration: InputDecoration(
+                labelText: 'Amount',
+                labelStyle: const TextStyle(color: tealAccentColor),
+                prefixIcon: const Icon(Icons.attach_money, color: tealAccentColor),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: tealAccentColor),
                 ),
-                child: const Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Your Current Balance',
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 16,
-                      ),
-                    ),
-                    SizedBox(height: 6),
-                    Text(
-                      '500 L.E',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: tealAccentColor, width: 2),
                 ),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 16,
+                ),
+                fillColor: Colors.white,
+                filled: true,
               ),
-              const SizedBox(height: 20),
-              // Recharge Section
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.5),
-                  borderRadius: BorderRadius.circular(15),
+            ),
+            const SizedBox(height: 20),
+            // Pay button
+            SizedBox(
+              height: 50,
+              child: ElevatedButton(
+                onPressed: _isProcessing ? null : _processPayment,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: tealAccentColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  disabledBackgroundColor: tealAccentColor.withOpacity(0.6),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Recharge The Balance',
-                      style: TextStyle(
-                        color: Colors.black87,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
+                child: _isProcessing
+                    ? const CircularProgressIndicator(color: Colors.white)
+                    : const Text(
+                        'Pay Now',
+                        style: TextStyle(fontSize: 18, color: Colors.white),
                       ),
+              ),
+            ),
+            const SizedBox(height: 30),
+            // Payment status
+            if (_paymentStatus != null)
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: _isSuccess 
+                    ? const Color(0xFFEAF7F8) // Very light teal for success
+                    : Colors.red.shade50,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: _isSuccess ? tealAccentColor : Colors.red,
+                    width: 1,
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      _isSuccess ? Icons.check_circle : Icons.error,
+                      color: _isSuccess ? tealAccentColor : Colors.red,
                     ),
-                    const SizedBox(height: 20),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 15,
-                              vertical: 15,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: Colors.black12),
-                            ),
-                            child: const Text(
-                              'Value',
-                              style: TextStyle(
-                                color: Colors.black54,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        const Icon(
-                          Icons.arrow_forward,
-                          color: Color(0xFF26A69A),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 15,
-                              vertical: 15,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: Colors.black12),
-                            ),
-                            child: const Text(
-                              'Balance',
-                              style: TextStyle(
-                                color: Colors.black54,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    // Continue Button
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF26A69A),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          elevation: 0,
-                          padding: const EdgeInsets.symmetric(vertical: 15),
-                        ),
-                        child: const Text(
-                          'Continue',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        _paymentStatus!,
+                        style: TextStyle(
+                          color: _isSuccess ? tealAccentColor : Colors.red,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
-            ],
-          ),
+          ],
         ),
       ),
     );
