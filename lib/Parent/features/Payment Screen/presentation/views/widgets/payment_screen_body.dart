@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 const Color lightGrayBackground = Color(0xFFF7F7F7);
 const Color tealAccentColor = Color(0xFF209CA5);
 const Color myBlackColor = Color(0xff1A1A1A);
+const Color redWarning = Colors.red;
 
 class PaymentScreenBody extends StatefulWidget {
   const PaymentScreenBody({super.key});
@@ -138,11 +139,11 @@ class _PaymentScreenBodyState extends State<PaymentScreenBody> {
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: _isSuccess 
-                    ? const Color(0xFFEAF7F8) // Very light teal for success
-                    : Colors.red.shade50,
+                    ? tealAccentColor.withOpacity(0.2) // Very light teal for success
+                    : redWarning.withOpacity(0.15),
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: _isSuccess ? tealAccentColor : Colors.red,
+                    color: _isSuccess ? tealAccentColor : redWarning,
                     width: 1,
                   ),
                 ),
@@ -150,14 +151,14 @@ class _PaymentScreenBodyState extends State<PaymentScreenBody> {
                   children: [
                     Icon(
                       _isSuccess ? Icons.check_circle : Icons.error,
-                      color: _isSuccess ? tealAccentColor : Colors.red,
+                      color: _isSuccess ? tealAccentColor : redWarning,
                     ),
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
                         _paymentStatus!,
                         style: TextStyle(
-                          color: _isSuccess ? tealAccentColor : Colors.red,
+                          color: _isSuccess ? tealAccentColor : redWarning,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
