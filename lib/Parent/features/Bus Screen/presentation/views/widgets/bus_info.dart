@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
-class BusInfo extends StatelessWidget {
-  const BusInfo({Key? key}) : super(key: key);
+import '../../../data/models/bus_model.dart';
 
+class BusInfo extends StatelessWidget {
+  const BusInfo({super.key, required this.bus});
+  final Bus bus;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -25,26 +27,48 @@ class BusInfo extends StatelessWidget {
           // Departure & Arrival information
           Row(
             children: [
-              const Expanded(
+              Expanded(
                 child: Column(
                   children: [
-                    Icon(Icons.departure_board, color: Color(0xFF1976D2), size: 28),
-                    SizedBox(height: 8),
-                    Text('Departure time', style: TextStyle(fontSize: 14, color: Color(0xFF757575))),
-                    SizedBox(height: 4),
-                    Text('08:30 AM', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF1976D2))),
+                    const Icon(Icons.departure_board,
+                        color: Color(0xFF1976D2), size: 28),
+                    const SizedBox(height: 8),
+                    const Text('Departure time',
+                        style:
+                            TextStyle(fontSize: 14, color: Color(0xFF757575))),
+                    const SizedBox(height: 4),
+                    Text(
+                      '${bus.departureTime.hour.toString().padLeft(2, '0')}:'
+                      '${bus.departureTime.minute.toString().padLeft(2, '0')}',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF1976D2),
+                      ),
+                    ),
                   ],
                 ),
               ),
               Container(height: 70, width: 1, color: const Color(0xFFE0E0E0)),
-              const Expanded(
+              Expanded(
                 child: Column(
                   children: [
-                    Icon(Icons.access_time_filled, color: Color(0xFF43A047), size: 28),
-                    SizedBox(height: 8),
-                    Text('Arrival time', style: TextStyle(fontSize: 14, color: Color(0xFF757575))),
-                    SizedBox(height: 4),
-                    Text('01:15 PM', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF43A047))),
+                    const Icon(Icons.access_time_filled,
+                        color: Color(0xFF43A047), size: 28),
+                    const SizedBox(height: 8),
+                    const Text('Arrival time',
+                        style:
+                            TextStyle(fontSize: 14, color: Color(0xFF757575))),
+                    const SizedBox(height: 4),
+                    Text(
+                      '${bus.arrivalTime.hour.toString().padLeft(2, '0')}:'
+                      '${bus.arrivalTime.minute.toString().padLeft(2, '0')}',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF1976D2),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -57,26 +81,40 @@ class BusInfo extends StatelessWidget {
           // Driver & Bus Number information
           Row(
             children: [
-              const Expanded(
+              Expanded(
                 child: Column(
                   children: [
-                    Icon(Icons.person, color: Color(0xFFD84315), size: 28),
-                    SizedBox(height: 8),
-                    Text('Driver name', style: TextStyle(fontSize: 14, color: Color(0xFF757575))),
-                    SizedBox(height: 4),
-                    Text('John Smith', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFFD84315))),
+                    const Icon(Icons.person,
+                        color: Color(0xFFD84315), size: 28),
+                    const SizedBox(height: 8),
+                    const Text('Driver name',
+                        style:
+                            TextStyle(fontSize: 14, color: Color(0xFF757575))),
+                    const SizedBox(height: 4),
+                    Text(bus.driverName,
+                        style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFFD84315))),
                   ],
                 ),
               ),
               Container(height: 70, width: 1, color: const Color(0xFFE0E0E0)),
-              const Expanded(
+              Expanded(
                 child: Column(
                   children: [
-                    Icon(Icons.directions_bus, color: Color(0xFF7B1FA2), size: 28),
-                    SizedBox(height: 8),
-                    Text('Bus No.', style: TextStyle(fontSize: 14, color: Color(0xFF757575))),
-                    SizedBox(height: 4),
-                    Text('BUS-1234', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF7B1FA2))),
+                    const Icon(Icons.directions_bus,
+                        color: Color(0xFF7B1FA2), size: 28),
+                    const SizedBox(height: 8),
+                    const Text('Bus No.',
+                        style:
+                            TextStyle(fontSize: 14, color: Color(0xFF757575))),
+                    const SizedBox(height: 4),
+                    Text(bus.number,
+                        style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF7B1FA2))),
                   ],
                 ),
               ),

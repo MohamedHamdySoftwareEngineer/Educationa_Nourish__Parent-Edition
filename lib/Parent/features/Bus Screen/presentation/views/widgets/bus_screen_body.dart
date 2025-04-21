@@ -1,7 +1,11 @@
 import 'dart:async'; // استيراد مكتبة التعامل مع التدفقات الزمنية
 import 'package:educational_nourish/Parent/constants.dart'; // استيراد الثوابت العامة للتطبيق
+import 'package:educational_nourish/Parent/features/Bus%20Screen/bloc/bus_bloc.dart';
+import 'package:educational_nourish/Parent/features/Bus%20Screen/bloc/bus_state.dart';
+import 'package:educational_nourish/Parent/features/Bus%20Screen/data/models/bus_model.dart';
 import 'package:educational_nourish/Parent/features/Bus%20Screen/presentation/views/widgets/bus_info.dart'; // استيراد ويدجت جدول مواعيد الباص
 import 'package:flutter/material.dart'; // استيراد عناصر الواجهة من فلاتر
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart'; // استيراد مكتبة الخرائط
 import 'package:latlong2/latlong.dart'; // استيراد مكتبة النقاط الجغرافية
 import 'package:geolocator/geolocator.dart'; // استيراد مكتبة تحديد الموقع
@@ -33,7 +37,10 @@ class _BusScreenBodyState extends State<BusScreenBody> {
         height: double.infinity, // ارتفاع كامل الشاشة
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [firstGradientColor, secondGradientColor], // تدرج الألوان من الأعلى للأسفل
+            colors: [
+              firstGradientColor,
+              secondGradientColor
+            ], // تدرج الألوان من الأعلى للأسفل
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -41,7 +48,8 @@ class _BusScreenBodyState extends State<BusScreenBody> {
         child: RefreshIndicator(
           onRefresh: _handleRefresh, // ربط السحب مع الدالة
           child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(), // للسماح بالتمرير حتى لو المحتوى صغير
+            physics:
+                const AlwaysScrollableScrollPhysics(), // للسماح بالتمرير حتى لو المحتوى صغير
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -51,12 +59,14 @@ class _BusScreenBodyState extends State<BusScreenBody> {
                   child: Center(
                     child: Text(
                       'Student Location', // عنوان القسم
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                     ),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0), // حواف أفقية
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0), // حواف أفقية
                   child: Card(
                     elevation: 4, // الظل
                     shape: RoundedRectangleBorder(
@@ -66,18 +76,32 @@ class _BusScreenBodyState extends State<BusScreenBody> {
                     child: SizedBox(
                       height: 300, // ارتفاع ثابت للحاوية
                       // هذا المفتاح يخبر فلاتر: «إذا تغيّر المفتاح، اعتبر هذا الودجت جديد ولا ترجع تستخدم الحالة القديمة.»
-                      child: LiveMap(key: ValueKey(_mapRefreshKey)),  
+                      child: LiveMap(key: ValueKey(_mapRefreshKey)),
                     ),
                   ),
                 ),
                 const Padding(
-                  padding: EdgeInsets.only(top: 30, left: 16), // مسافة من الأعلى واليسار
+                  padding: EdgeInsets.only(
+                      top: 30, left: 16), // مسافة من الأعلى واليسار
                   child: Text(
                     'Bus schedules', // عنوان جدول المواعيد
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                   ),
                 ),
-                const BusInfo(), // ويدجت جدول المواعيد
+                BlocBuilder<BusBloc, BusState>(
+                  builder: (context, state) {
+                    if (state is BusLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is BusLoaded) {
+              return  BusInfo(bus:state.buses.first);
+            } else if (state is BusError) {
+              return Center(
+                child: Text('Error:${state.message}'),
+              );
+            }
+            return const Center(child: Text("try again later!"));
+                  },
+                ), // ويدجت جدول المواعيد
               ],
             ),
           ),
@@ -130,7 +154,8 @@ class LiveMapState extends State<LiveMap> {
       _showError('😊يسطا gps شغل ال'); // رسالة خطأ
       return;
     }
-    var permission = await Geolocator.checkPermission(); // تحقق من صلاحيات الموقع
+    var permission =
+        await Geolocator.checkPermission(); // تحقق من صلاحيات الموقع
     if (permission == LocationPermission.denied ||
         permission == LocationPermission.deniedForever) {
       permission = await Geolocator.requestPermission(); // طلب صلاحيات جديدة
@@ -169,7 +194,7 @@ class LiveMapState extends State<LiveMap> {
       height: 40,
       point: latLng,
       builder: (_) => const Icon(
-        Icons.location_on,       // أيقونة الطالب
+        Icons.location_on, // أيقونة الطالب
         size: 40,
         color: Colors.blueAccent,
       ),
@@ -210,7 +235,8 @@ class LiveMapState extends State<LiveMap> {
       ),
       children: [
         TileLayer(
-          urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', // خريطة OpenStreetMap
+          urlTemplate:
+              'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', // خريطة OpenStreetMap
           subdomains: const ['a', 'b', 'c'],
           userAgentPackageName: 'com.example.your_app',
         ),
