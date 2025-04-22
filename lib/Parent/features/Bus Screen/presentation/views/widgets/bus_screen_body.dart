@@ -91,15 +91,15 @@ class _BusScreenBodyState extends State<BusScreenBody> {
                 BlocBuilder<BusBloc, BusState>(
                   builder: (context, state) {
                     if (state is BusLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is BusLoaded) {
-              return  BusInfo(bus:state.buses.first);
-            } else if (state is BusError) {
-              return Center(
-                child: Text('Error:${state.message}'),
-              );
-            }
-            return const Center(child: Text("try again later!"));
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (state is BusLoaded) {
+                      return BusInfo(bus: state.buses.first);
+                    } else if (state is BusError) {
+                      return Center(
+                        child: Text('Error:${state.message}'),
+                      );
+                    }
+                    return const Center(child: Text("try again later!"));
                   },
                 ), // ويدجت جدول المواعيد
               ],

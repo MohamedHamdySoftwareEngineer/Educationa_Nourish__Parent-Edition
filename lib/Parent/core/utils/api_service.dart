@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-
+import 'package:educational_nourish/Parent/features/Exam/data/models/exam_model.dart';
 import '../../features/Bus Screen/data/models/bus_model.dart';
+
 import '../../features/Parent Profile/data/models/Profile.dart';
   // adjust path as needed
 
@@ -36,5 +36,11 @@ class ApiService {
     return list
         .map((json) => Bus.fromJson(json as Map<String, dynamic>))
         .toList();
+  }
+
+   /// Fetches a single Exam by its ID (e.g. '21101')
+  Future<Exam> fetchExam({required String endPoint,required String id}) async {
+    final response = await _dio.get('$_baseUrl$endPoint/$id');
+    return Exam.fromJson(response.data as Map<String, dynamic>);
   }
 }

@@ -38,8 +38,7 @@ class BusInfo extends StatelessWidget {
                             TextStyle(fontSize: 14, color: Color(0xFF757575))),
                     const SizedBox(height: 4),
                     Text(
-                      '${bus.departureTime.hour.toString().padLeft(2, '0')}:'
-                      '${bus.departureTime.minute.toString().padLeft(2, '0')}',
+                      bus.formattedDepartureTime,
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -61,8 +60,8 @@ class BusInfo extends StatelessWidget {
                             TextStyle(fontSize: 14, color: Color(0xFF757575))),
                     const SizedBox(height: 4),
                     Text(
-                      '${bus.arrivalTime.hour.toString().padLeft(2, '0')}:'
-                      '${bus.arrivalTime.minute.toString().padLeft(2, '0')}',
+                      bus.formattedArrivalTime,
+                      
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,

@@ -12,7 +12,7 @@ class BusScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => BusBloc(apiService: ApiService(  ))..add(FetchBuses()),
+      create: (context) => BusBloc(apiService: ApiService())..add(FetchBuses()),
       child: const Scaffold(
         body: BusScreenBody(),
       ),

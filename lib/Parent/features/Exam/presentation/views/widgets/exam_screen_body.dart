@@ -3,48 +3,21 @@ import 'package:educational_nourish/Parent/core/utils/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:educational_nourish/Parent/core/widgets/base_scaffold.dart';
-
-class Exam {
-  final String type;
-  final String subject;
-  final DateTime dateTime;
-
-  Exam({required this.type, required this.subject, required this.dateTime});
-}
+import '../../../data/models/exam_model.dart';
 
 class ExamScreenBody extends StatefulWidget {
-  const ExamScreenBody({super.key});
+  final List<Exam> exam;
+
+  const ExamScreenBody({Key? key, required this.exam}) : super(key: key);
 
   @override
   State<ExamScreenBody> createState() => _ExamScreenBodyState();
 }
 
 class _ExamScreenBodyState extends State<ExamScreenBody> {
-  final List<Exam> exams = [
-    Exam(
-        type: 'Midterm',
-        subject: 'Math',
-        dateTime: DateTime(2025, 5, 15, 10, 0)),
-    Exam(
-        type: 'Final',
-        subject: 'Arabic',
-        dateTime: DateTime(2025, 6, 20, 14, 0)),
-    Exam(
-        type: 'Quiz',
-        subject: 'English',
-        dateTime: DateTime(2025, 5, 10, 9, 30)),
-    Exam(
-        type: 'Midterm',
-        subject: 'Science',
-        dateTime: DateTime(2025, 5, 25, 11, 0)),
-    Exam(
-        type: 'Final', subject: 'Math', dateTime: DateTime(2025, 6, 15, 13, 0)),
-  ];
-
   String? selectedType;
   String? selectedSubject;
 
-  // Get exam type color based on type
   Color getExamTypeColor(String type) {
     switch (type) {
       case 'Midterm':
@@ -58,7 +31,6 @@ class _ExamScreenBodyState extends State<ExamScreenBody> {
     }
   }
 
-  // Get exam icon based on subject
   IconData getSubjectIcon(String subject) {
     switch (subject) {
       case 'Math':
@@ -74,25 +46,15 @@ class _ExamScreenBodyState extends State<ExamScreenBody> {
     }
   }
 
-  
+  String _formatDate(DateTime dateTime) => DateFormat('MMM d, yyyy').format(dateTime);
 
-  // Format date only
-  String _formatDate(DateTime dateTime) {
-    return DateFormat('MMM d, yyyy').format(dateTime);
-  }
+  String _formatTime(DateTime dateTime) => DateFormat('h:mm a').format(dateTime);
 
-  // Format time only
-  String _formatTime(DateTime dateTime) {
-    return DateFormat('h:mm a').format(dateTime);
-  }
-
-  List<Exam> get filteredExams {
-    return exams
-        .where((exam) =>
-            (selectedType == null || exam.type == selectedType) &&
-            (selectedSubject == null || exam.subject == selectedSubject))
-        .toList();
-  }
+  List<Exam> get filteredExams => widget.exam
+      .where((exam) =>
+          (selectedType == null || exam.type == selectedType) &&
+          (selectedSubject == null || exam.subjectName == selectedSubject))
+      .toList();
 
   @override
   Widget build(BuildContext context) {
@@ -120,26 +82,28 @@ class _ExamScreenBodyState extends State<ExamScreenBody> {
   }
 
   Widget _buildFilterSection() {
+    final types = widget.exam.map((e) => e.type).toSet().toList();
+    final subjects = widget.exam.map((e) => e.subjectName).toSet().toList();
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Row(
         children: [
           Expanded(
             child: _buildDropdown(
-              labelText: 'Exam Type', // This will appear on the border
-              hintText: 'All', // This will appear inside the dropdown
+              labelText: 'Exam Type',
+              hintText: 'All',
               value: selectedType,
-              items: exams.map((e) => e.type).toSet().toList(),
+              items: types,
               onChanged: (value) => setState(() => selectedType = value),
             ),
           ),
           const SizedBox(width: 16),
           Expanded(
             child: _buildDropdown(
-              labelText: 'Exam Subject', // This will appear on the border
-              hintText: 'All', // This will appear inside the dropdown
+              labelText: 'Exam Subject',
+              hintText: 'All',
               value: selectedSubject,
-              items: exams.map((e) => e.subject).toSet().toList(),
+              items: subjects,
               onChanged: (value) => setState(() => selectedSubject = value),
             ),
           ),
@@ -149,37 +113,26 @@ class _ExamScreenBodyState extends State<ExamScreenBody> {
   }
 
   Widget _buildDropdown({
-    required String labelText, // Text that appears on the border
-    required String
-        hintText, // Text that appears inside when nothing is selected
+    required String labelText,
+    required String hintText,
     required String? value,
     required List<String> items,
     required void Function(String?)? onChanged,
   }) {
-    // Create a list to hold all DropdownMenuItem widgets
-    List<DropdownMenuItem<String>> dropdownItems = [];
-
-    // Add the default option as the first item in the dropdown
-    dropdownItems.add(
+    final dropdownItems = [
       DropdownMenuItem<String>(
         value: null,
         child: Text(hintText, style: const TextStyle(color: Colors.black)),
       ),
-    );
-
-    // Loop through the items list and add each as a DropdownMenuItem
-    for (String item in items) {
-      dropdownItems.add(
-        DropdownMenuItem<String>(
-          value: item,
-          child: Text(item),
-        ),
-      );
-    }
+      ...items.map((item) => DropdownMenuItem<String>(
+            value: item,
+            child: Text(item),
+          )),
+    ];
 
     return DropdownButtonFormField<String>(
       decoration: InputDecoration(
-        labelText: labelText, // This is the text on the border
+        labelText: labelText,
         border: customBorder,
         enabledBorder: customBorder,
         focusedBorder: customBorder,
@@ -187,31 +140,24 @@ class _ExamScreenBodyState extends State<ExamScreenBody> {
       value: value,
       items: dropdownItems,
       onChanged: onChanged,
-      hint: Text(hintText), // This is the hint text inside the dropdown
+      hint: Text(hintText),
       isExpanded: true,
     );
   }
 
   Widget _buildExamList() {
-    if (filteredExams.isEmpty) {
+    final list = filteredExams;
+    if (list.isEmpty) {
       return Expanded(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.event_busy,
-                size: 64,
-                color: Colors.grey.shade400,
-              ),
+              Icon(Icons.event_busy, size: 64, color: Colors.grey.shade400),
               const SizedBox(height: 16),
               Text(
                 'No exams found',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey.shade600,
-                ),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey.shade600),
               ),
             ],
           ),
@@ -222,9 +168,9 @@ class _ExamScreenBodyState extends State<ExamScreenBody> {
     return Expanded(
       child: ListView.builder(
         padding: const EdgeInsets.all(16),
-        itemCount: filteredExams.length,
+        itemCount: list.length,
         itemBuilder: (context, index) {
-          final exam = filteredExams[index];
+          final exam = list[index];
           return Card(
             elevation: 3,
             margin: const EdgeInsets.only(bottom: 16),
@@ -241,14 +187,9 @@ class _ExamScreenBodyState extends State<ExamScreenBody> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CircleAvatar(
-                        backgroundColor:
-                            getExamTypeColor(exam.type).withOpacity(0.2),
+                        backgroundColor: getExamTypeColor(exam.type).withOpacity(0.2),
                         radius: 24,
-                        child: Icon(
-                          getSubjectIcon(exam.subject),
-                          color: getExamTypeColor(exam.type),
-                          size: 26,
-                        ),
+                        child: Icon(getSubjectIcon(exam.subjectName), color: getExamTypeColor(exam.type), size: 26),
                       ),
                       const SizedBox(width: 16),
                       Expanded(
@@ -256,66 +197,33 @@ class _ExamScreenBodyState extends State<ExamScreenBody> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Expanded(
                                   child: Text(
-                                    exam.subject,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                    ),
+                                    exam.subjectName,
+                                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12, vertical: 6),
-                                      constraints: const BoxConstraints(
-                                        minWidth: 80,
-                                        maxWidth: 140,
-                                      ),
-                                  decoration: BoxDecoration(
-                                    color: getExamTypeColor(exam.type),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Text(
-                                    exam.type,
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                    ),
-                                  ),
+                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                  constraints: const BoxConstraints(minWidth: 80, maxWidth: 140),
+                                  decoration: BoxDecoration(color: getExamTypeColor(exam.type), borderRadius: BorderRadius.circular(12)),
+                                  child: Text(exam.type, textAlign: TextAlign.center, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14)),
                                 ),
                               ],
                             ),
                             const SizedBox(height: 8),
                             Row(
                               children: [
-                                Icon(Icons.calendar_today,
-                                    size: 16, color: Colors.grey.shade600),
+                                Icon(Icons.calendar_today, size: 16, color: Colors.grey.shade600),
                                 const SizedBox(width: 6),
-                                Text(
-                                  _formatDate(exam.dateTime),
-                                  style: TextStyle(
-                                    color: Colors.grey.shade700,
-                                    fontSize: 14,
-                                  ),
-                                ),
+                                Text(_formatDate(exam.date), style: TextStyle(color: Colors.grey.shade700, fontSize: 14)),
                                 const SizedBox(width: 16),
-                                Icon(Icons.access_time,
-                                    size: 16, color: Colors.grey.shade600),
+                                Icon(Icons.access_time, size: 16, color: Colors.grey.shade600),
                                 const SizedBox(width: 6),
-                                Text(
-                                  _formatTime(exam.dateTime),
-                                  style: TextStyle(
-                                    color: Colors.grey.shade700,
-                                    fontSize: 14,
-                                  ),
-                                ),
+                                Text(_formatTime(exam.date), style: TextStyle(color: Colors.grey.shade700, fontSize: 14)),
                               ],
                             ),
                           ],
@@ -323,7 +231,6 @@ class _ExamScreenBodyState extends State<ExamScreenBody> {
                       ),
                     ],
                   ),
-                 
                 ],
               ),
             ),
