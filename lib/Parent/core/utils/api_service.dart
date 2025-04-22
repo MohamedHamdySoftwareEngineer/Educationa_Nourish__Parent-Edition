@@ -38,7 +38,7 @@ class ApiService {
         .toList();
   }
 
-   /// Fetches a single Exam by its ID (e.g. '21101')
+   
   Future<Exam> fetchExam({required String endPoint,required String id}) async {
     final response = await _dio.get('$_baseUrl$endPoint/$id');
     return Exam.fromJson(response.data as Map<String, dynamic>);

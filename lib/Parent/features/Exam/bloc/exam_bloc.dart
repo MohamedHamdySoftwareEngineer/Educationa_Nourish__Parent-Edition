@@ -20,7 +20,7 @@ class ExamBloc extends Bloc<ExamEvent, ExamState> {
     try {
       final exam = await apiService.fetchExam(endPoint: 'exams',id: event.id);
       emit(ExamLoaded(exam: exam));
-    } catch (e, st) {
+    } catch (e) {
       emit(ExamError(message: e.toString()));
     }
   }

@@ -10,23 +10,24 @@ class ExamScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ExamBloc(apiService: ApiService())..add(const FetchExam('21101')),
-      child:  Scaffold(
+      create: (context) =>
+          ExamBloc(apiService: ApiService())..add( const FetchExam('EX1')),
+      child: Scaffold(
         body: BlocSelector<ExamBloc, ExamState, ExamState>(
-  selector: (state) => state,
-  builder: (context, state) {
-    if (state is ExamLoading) {
-      return const Center(child: CircularProgressIndicator());
-    } else if (state is ExamLoaded) {
-      // pass the loaded exam into your body widget
-      return ExamScreenBody(exam: [state.exam]);
-    } else if (state is ExamError) {
-      return Center(child: Text('Error: ${state.message}'));
-    }
-    // fallback for any other/unexpected states
-    return const Center(child: Text('Try again later!'));
-  },
-),
+          selector: (state) => state,
+          builder: (context, state) {
+            if (state is ExamLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is ExamLoaded) {
+              // pass the loaded exam into your body widget
+              return ExamScreenBody(exam: [state.exam]);
+            } else if (state is ExamError) {
+              return Center(child: Text('Error: ${state.message}'));
+            }
+            // fallback for any other/unexpected states
+            return const Center(child: Text('Try again later!'));
+          },
+        ),
       ),
     );
   }
