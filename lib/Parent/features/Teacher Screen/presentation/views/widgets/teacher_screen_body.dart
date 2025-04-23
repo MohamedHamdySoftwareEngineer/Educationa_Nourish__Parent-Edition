@@ -9,8 +9,8 @@ import '../../../../../core/utils/styles.dart';
 
 class TeacherScreenBody extends StatelessWidget {
   final List<TeacherData> teachers;
-  final List<Subject> subjects;
-  const TeacherScreenBody({super.key,required this.teachers, required this.subjects});
+  
+  const TeacherScreenBody({super.key,required this.teachers});
 
   @override
   Widget build(BuildContext context) {

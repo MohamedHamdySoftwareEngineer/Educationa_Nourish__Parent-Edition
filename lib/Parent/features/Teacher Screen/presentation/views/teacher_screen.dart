@@ -25,7 +25,7 @@ class TeacherScreen extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             } else if (state is TeacherLoaded) {
               // pass the loaded exam into your body widget
-              return TeacherScreenBody(teachers: [state.teacher], subjects: [state.teacher.subject]);
+              return TeacherScreenBody(teachers: [state.teacher]);
             } else if (state is TeacherError) {
               return Center(child: Text('Error: ${state.message}'));
             }
