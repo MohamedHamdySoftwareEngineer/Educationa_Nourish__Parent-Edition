@@ -3,6 +3,7 @@ import 'package:educational_nourish/Parent/features/Exam/data/models/exam_model.
 import '../../features/Bus Screen/data/models/bus_model.dart';
 
 import '../../features/Parent Profile/data/models/Profile.dart';
+import '../../features/Teacher Screen/data/models/teacher_model.dart';
   // adjust path as needed
 
 class ApiService {
@@ -42,5 +43,14 @@ class ApiService {
   Future<Exam> fetchExam({required String endPoint,required String id}) async {
     final response = await _dio.get('$_baseUrl$endPoint/$id');
     return Exam.fromJson(response.data as Map<String, dynamic>);
+  }
+
+  /// Fetches a Teacher by ID and wraps it in your ApiResponse model
+  Future<ApiResponse> fetchTeacher({
+    required String endPoint,
+    required String id,
+  }) async {
+    final response = await _dio.get('$_baseUrl$endPoint/$id');
+    return ApiResponse.fromJson(response.data as Map<String, dynamic>);
   }
 }

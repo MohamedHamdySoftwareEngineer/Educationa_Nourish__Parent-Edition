@@ -1,55 +1,16 @@
 import 'package:educational_nourish/Parent/constants.dart';
 import 'package:educational_nourish/Parent/core/utils/assets.dart';
 import 'package:educational_nourish/Parent/core/widgets/base_scaffold.dart';
-import 'package:educational_nourish/Parent/features/Teacher%20Screen/presentation/views/widgets/teacher_class.dart';
+import 'package:educational_nourish/Parent/features/Teacher%20Screen/data/models/teacher_model.dart';
+
 import 'package:flutter/material.dart';
 
 import '../../../../../core/utils/styles.dart';
 
 class TeacherScreenBody extends StatelessWidget {
-  final List<Teacher> teachers = [
-    Teacher(
-      name: "Prof. Mohamed Hamdy",
-      subject: "Mathematics",
-      email: "mohamed.hamdy@example.edu",
-      imagePath: teacherImage,
-      description:
-          "Ph.D in Applied Mathematics with 25 years of teaching experience. Specializes in calculus and linear algebra.",
-    ),
-    Teacher(
-      name: "Dr. Michael Chen",
-      subject: "Computer Science",
-      email: "michael.chen@example.edu",
-      imagePath: teacherImage,
-      description:
-          "Former software engineer with expertise in algorithms and data structures. Has published several research papers on AI.",
-    ),
-    Teacher(
-      name: "Dr. Emily Rodriguez",
-      subject: "Biology",
-      email: "emily.rodriguez@example.edu",
-      imagePath: teacherImage,
-      description:
-          "Specializes in molecular biology and genetics. Conducts research on cancer cell biology and teaches undergraduate courses.",
-    ),
-    Teacher(
-      name: "Dr. James Wilson",
-      subject: "History",
-      email: "james.wilson@example.edu",
-      imagePath: teacherImage,
-      description:
-          "Expert in world history with focus on 20th century events. Author of three history textbooks and passionate storyteller.",
-    ),
-    Teacher(
-      name: "Dr. James Wilson",
-      subject: "Biology",
-      email: "james.wilson.biology.professor@university-example.edu",
-      imagePath: teacherImage,
-      description:
-          "Specializes in molecular biology and genetics. Conducts research on cancer cell biology and teaches undergraduate courses.",
-    ),
-  ];
-  TeacherScreenBody({super.key});
+  final List<TeacherData> teachers;
+  final List<Subject> subjects;
+  const TeacherScreenBody({super.key,required this.teachers, required this.subjects});
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +41,7 @@ class TeacherScreenBody extends StatelessWidget {
 }
 
 class TeacherCard extends StatelessWidget {
-  final Teacher teacher;
+  final TeacherData teacher;
 
   const TeacherCard({
     super.key,
@@ -113,7 +74,7 @@ class TeacherCard extends StatelessWidget {
               radius: 60,
               child: ClipOval(
                 child: Image.asset(
-                  teacher.imagePath,
+                  teacherImage,
                   width: 120,
                   height: 120,
                   fit: BoxFit.contain,
@@ -138,7 +99,7 @@ class TeacherCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
-                teacher.subject,
+                teacher.subject.name,
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -148,7 +109,7 @@ class TeacherCard extends StatelessWidget {
             ),
             // Teacher Name
             Text(
-              teacher.name,
+              teacher.username,
               style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -181,15 +142,15 @@ class TeacherCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-            // Teacher Description
-            Text(
-              teacher.description,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey.shade700,
-              ),
-              textAlign: TextAlign.center,
-            ),
+            // // Teacher Description
+            // Text(
+            //   teacher.description,
+            //   style: TextStyle(
+            //     fontSize: 14,
+            //     color: Colors.grey.shade700,
+            //   ),
+            //   textAlign: TextAlign.center,
+            // ),
           ],
         ),
       ),
