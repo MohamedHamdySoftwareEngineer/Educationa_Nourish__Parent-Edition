@@ -1,4 +1,4 @@
-import 'package:educational_nourish/Parent/constants.dart';
+import 'package:educational_nourish/Parent/core/utils/constants.dart';
 import 'package:educational_nourish/Parent/core/utils/assets.dart';
 import 'package:educational_nourish/Parent/core/widgets/base_scaffold.dart';
 import 'package:educational_nourish/Parent/features/Teacher%20Screen/data/models/teacher_model.dart';

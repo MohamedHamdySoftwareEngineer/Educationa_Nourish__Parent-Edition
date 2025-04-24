@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../../../constants.dart';
+import '../../../../../core/utils/constants.dart';
 
 class BuildCard extends StatelessWidget {
   const BuildCard(

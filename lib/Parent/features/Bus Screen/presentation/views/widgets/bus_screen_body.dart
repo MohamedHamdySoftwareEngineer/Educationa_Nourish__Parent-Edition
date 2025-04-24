@@ -1,5 +1,5 @@
 import 'dart:async'; // استيراد مكتبة التعامل مع التدفقات الزمنية
-import 'package:educational_nourish/Parent/constants.dart'; // استيراد الثوابت العامة للتطبيق
+import 'package:educational_nourish/Parent/core/utils/constants.dart'; // استيراد الثوابت العامة للتطبيق
 import 'package:educational_nourish/Parent/features/Bus%20Screen/bloc/bus_bloc.dart';
 import 'package:educational_nourish/Parent/features/Bus%20Screen/bloc/bus_state.dart';
 import 'package:educational_nourish/Parent/features/Bus%20Screen/data/models/bus_model.dart';

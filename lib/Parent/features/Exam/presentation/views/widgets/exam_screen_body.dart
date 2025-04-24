@@ -1,4 +1,4 @@
-import 'package:educational_nourish/Parent/constants.dart';
+import 'package:educational_nourish/Parent/core/utils/constants.dart';
 import 'package:educational_nourish/Parent/core/utils/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
